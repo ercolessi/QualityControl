@@ -1,0 +1,7 @@
+<map id="Framework/include/QualityControl/RootClassFactory.h" name="Framework/include/QualityControl/RootClassFactory.h">
+<area shape="rect" id="node3" href="$PostProcessingFactory_8cxx.html" title="Framework/src/PostProcessing\lFactory.cxx" alt="" coords="205,95,411,136"/>
+<area shape="rect" id="node4" href="$TaskFactory_8cxx.html" title="Framework/src/TaskFactory.cxx" alt="" coords="435,102,645,129"/>
+<area shape="rect" id="node5" href="$TrendingTask_8cxx.html" title="Framework/src/TrendingTask.cxx" alt="" coords="670,102,887,129"/>
+<area shape="rect" id="node6" href="$TrendingTaskITSFhr_8cxx.html" title="Modules/ITS/src/Trending\lTaskITSFhr.cxx" alt="" coords="911,95,1083,136"/>
+<area shape="rect" id="node7" href="$TrendingTaskITSThr_8cxx.html" title="Modules/ITS/src/Trending\lTaskITSThr.cxx" alt="" coords="1107,95,1279,136"/>
+</map>
