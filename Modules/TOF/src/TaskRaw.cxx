@@ -202,7 +202,7 @@ void RawDataDecoder::resetHistograms() // Reset of histograms in Decoder
 }
 
 void RawDataDecoder::estimateNoise(std::shared_ptr<TH2F> hFeaStripNoise)
-{ 
+{
   int FeaCounter[nsectors][nstrips][4] = { 0 };
   double IntegratedTimeFea[nsectors][nstrips][4] = { 0. };
   double IntegratedTime[nsectors][nstrips] = { 0. };
@@ -218,7 +218,7 @@ void RawDataDecoder::estimateNoise(std::shared_ptr<TH2F> hFeaStripNoise)
       continue;
     // check if this channel was active
     if (indexcounter == 0)
-      continue; 
+      continue;
 
     auto rate = (float)indexcounter / time;
 
@@ -248,7 +248,7 @@ void RawDataDecoder::estimateNoise(std::shared_ptr<TH2F> hFeaStripNoise)
     IntegratedTime[sector][strip] += time;
     FeaCounter[sector][strip][fea] += indexcounter;
     IntegratedTimeFea[sector][strip][fea] += time;
-  }// end loop over index
+  } // end loop over index
 
   for (int isector = 0; isector < nsectors; isector++) {
     for (int istrip = 0; istrip < nstrips; istrip++) {
@@ -263,13 +263,13 @@ void RawDataDecoder::estimateNoise(std::shared_ptr<TH2F> hFeaStripNoise)
 
         if (timeFea < 1.e-6)
           continue;
-        
+
         auto rateFea = (float)indexcounterFea / timeFea;
 
-        hFeaStripNoise->SetBinContent(isector* 4 + (3 - iFea) + 1, istrip + 1, rateFea);
-      }// end loop over Feas
-    }// end loop over strips
-  }// end loop over sectors
+        hFeaStripNoise->SetBinContent(isector * 4 + (3 - iFea) + 1, istrip + 1, rateFea);
+      } // end loop over Feas
+    }   // end loop over strips
+  }     // end loop over sectors
 }
 
 // Implement the Task
@@ -312,7 +312,7 @@ void TaskRaw::initialize(o2::framework::InitContext& /*ctx*/)
   mTimeBC.reset(new TH1F("hTimeBC", "Raw BC Time;BC time (24.4 ps)", 1024, 0., 1024.));
   mDecoderRaw.mCounterTimeBC.MakeHistogram(mTimeBC.get());
   getObjectsManager()->startPublishing(mTimeBC.get());
-   
+
   mDecoderRaw.initHistograms();
   getObjectsManager()->startPublishing(mDecoderRaw.mHits.get());
   getObjectsManager()->startPublishing(mDecoderRaw.mTime.get());

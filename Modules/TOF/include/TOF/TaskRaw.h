@@ -21,7 +21,6 @@
 #define QC_MODULE_TOF_TASKRAW_H
 
 #include "TH1.h"
-#include "TH2.h"
 
 // O2 includes
 #include "TOFReconstruction/DecoderBase.h"
@@ -45,7 +44,7 @@ namespace o2::quality_control_modules::tof
 /// \author Nicolo' Jacazio and Francesca Ercolessi
 class RawDataDecoder final : public DecoderBase
 {
- public: 
+ public:
   /// \brief Constructor
   RawDataDecoder() = default;
   /// Destructor
@@ -58,27 +57,18 @@ class RawDataDecoder final : public DecoderBase
   static constexpr unsigned int ncrates = 72;    /// Number of crates
   static constexpr unsigned int ntrms = 10;      /// Number of TRMs per crate
   static constexpr unsigned int ntrmschains = 2; /// Number of TRMChains per TRM
-  static const int nsectors = 72; /// Number of sectors * Feas
-  static const int nstrips = 91; /// Number of strips per sector
+  static const int nsectors = 72;                /// Number of sectors * Feas
+  static const int nstrips = 91;                 /// Number of strips per sector
 
   /// Initialize noise analysis variables
   Int_t mTimeMin = 0, mTimeMax = -1;
   Double_t max_noise = 1.e+3 /* [Hz] */, tdc_width = 24.3660e-12 /* [s] */;
 
   /// Set parameters for noise analysis
-  void setTimeMin(std::string min)
-  {
-    mTimeMin = atoi(min.c_str());
-  }
-  void setTimeMax(std::string max)
-  {
-    mTimeMax = atoi(max.c_str());
-  }
-  void setMaxNoise(std::string thresholdnoise)
-  {
-    max_noise = atoi(thresholdnoise.c_str());
-  }
-  
+  void setTimeMin(std::string min) { mTimeMin = atoi(min.c_str()); }
+  void setTimeMax(std::string max) { mTimeMax = atoi(max.c_str()); }
+  void setMaxNoise(std::string thresholdnoise) { max_noise = atoi(thresholdnoise.c_str()); }
+
   // Names of diagnostic counters
   static const char* RDHDiagnosticsName[2]; /// RDH Counter names
   static const char* DRMDiagnosticName[32]; /// DRM Counter names
@@ -93,7 +83,7 @@ class RawDataDecoder final : public DecoderBase
   Counter<172800, nullptr> mCounterIndexE;      /// Counter for the single electronic index
   Counter<172800, nullptr> mCounterIndexENoise; /// Counter for the single electronic index for noise analysis
   Counter<1024, nullptr> mCounterTimeBC;        /// Counter for the Bunch Crossing Time
-  
+
   /// Histograms to fill
   std::map<std::string, std::shared_ptr<TH1>> mHistos;
 
@@ -121,7 +111,7 @@ class RawDataDecoder final : public DecoderBase
   std::shared_ptr<TH2F> mTest;          /// Tests in slot and TDC
   std::shared_ptr<TH2F> mOrbitID;       /// Orbit ID for the header and trailer words
   std::shared_ptr<TH2F> mFeaStripNoise; /// Noise map per FEA cards
-  
+
  private:
   /** decoding handlers **/
   void rdhHandler(const o2::header::RAWDataHeader* /*rdh*/) override{};
@@ -166,7 +156,5 @@ class TaskRaw final : public TaskInterface
 };
 
 } // namespace o2::quality_control_modules::tof
-
-  
 
 #endif // QC_MODULE_TOF_TASKRAW_H
