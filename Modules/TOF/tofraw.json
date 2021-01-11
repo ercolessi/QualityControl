@@ -37,8 +37,8 @@
         },
         "taskParameters": {
           "DecoderCONET": "False",
-          "TimeWindMin": "4096",
-          "TimeWindMax": "36864",
+          "TimeWindowMin": "4096",
+          "TimeWindowMax": "36864",
           "NoiseThreshold": "1000"
         },
         "location": "remote"
