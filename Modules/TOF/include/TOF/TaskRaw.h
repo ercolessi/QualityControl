@@ -20,8 +20,6 @@
 #ifndef QC_MODULE_TOF_TASKRAW_H
 #define QC_MODULE_TOF_TASKRAW_H
 
-#include "TH1.h"
-
 // O2 includes
 #include "TOFReconstruction/DecoderBase.h"
 #include "DataFormatsTOF/CompressedDataFormat.h"
@@ -50,15 +48,15 @@ class RawDataDecoder final : public DecoderBase
   /// Destructor
   ~RawDataDecoder() = default;
 
-  /// Function to run decoding
+  /// Function to run decoding of raw data
   void decode();
 
   /// Counters to fill
   static constexpr unsigned int ncrates = 72;    /// Number of crates
   static constexpr unsigned int ntrms = 10;      /// Number of TRMs per crate
   static constexpr unsigned int ntrmschains = 2; /// Number of TRMChains per TRM
-  static const int nsectors = 18;                /// Number of sectors
-  static const int nstrips = 91;                 /// Number of strips per sector
+  static constexpr unsigned int nsectors = 18;   /// Number of sectors
+  static constexpr unsigned int nstrips = 91;    /// Number of strips per sector
 
   /// Initialize noise analysis variables
   Int_t mTimeMin = 0, mTimeMax = -1;

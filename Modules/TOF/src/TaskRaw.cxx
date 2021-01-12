@@ -148,8 +148,9 @@ void RawDataDecoder::trailerHandler(const CrateHeader_t* crateHeader, const Crat
       nError++;
       mError->Fill(error->slotID + 0.5 * error->chain, error->tdcID);
       for (int ibit = 0; ibit < 15; ++ibit) {
-        if (error->errorFlags & (1 << ibit))
+        if (error->errorFlags & (1 << ibit)) {
           mErrorBits->Fill(ibit);
+        }
       }
     }
   }
@@ -207,64 +208,72 @@ void RawDataDecoder::estimateNoise(std::shared_ptr<TH2F> hFeaStripNoise)
   double IntegratedTimeFea[nsectors][nstrips][4] = { 0. };
   double IntegratedTime[nsectors][nstrips] = { 0. };
 
-  for (int i = 0; i < 172800; ++i) {
-    auto indexcounter = mCounterIndexENoise.HowMany(i);
-    auto crate = i / 2400;
-    auto time_window = (mTimeMax - mTimeMin) * tdc_width;
-    auto time = mDRMCounter[crate + 1].HowMany(0) * time_window;
+  for (unsigned int i = 0; i < 172800; ++i) {
+    const auto indexcounter = mCounterIndexENoise.HowMany(i);
+    const unsigned int crate = i / 2400;
+    const auto time_window = (mTimeMax - mTimeMin) * tdc_width;
+    const auto time = mDRMCounter[crate + 1].HowMany(0) * time_window;
 
     // start measure time from 1 micro second
-    if (time < 1.e-6)
+    if (time < 1.e-6) {
       continue;
+    }
     // check if this channel was active
-    if (indexcounter == 0)
+    if (indexcounter == 0) {
       continue;
+    }
 
-    auto rate = (float)indexcounter / time;
+    const auto rate = (float)indexcounter / time;
 
-    if (rate < RawDataDecoder::max_noise)
+    if (rate < RawDataDecoder::max_noise) {
       continue;
+    }
 
-    int crate_ = i % 2400;
-    int slot = crate_ / 240;
-    int slot_ = crate_ % 240;
-    int chain = slot_ / 120;
-    int chain_ = slot_ % 120;
-    int tdc = chain_ / 8;
-    int tdc_ = chain_ % 8;
-    int channel = tdc_;
+    const int crate_ = i % 2400;
+    const int slot = crate_ / 240;
+    const int slot_ = crate_ % 240;
+    const int chain = slot_ / 120;
+    const int chain_ = slot_ % 120;
+    const int tdc = chain_ / 8;
+    const int tdc_ = chain_ % 8;
+    const int channel = tdc_;
 
-    auto eIndex = o2::tof::Geo::getECHFromIndexes(crate, slot + 3, chain, tdc, channel);
-    auto dIndex = o2::tof::Geo::getCHFromECH(eIndex);
-    if (dIndex < 0)
+    const auto eIndex = o2::tof::Geo::getECHFromIndexes(crate, slot + 3, chain, tdc, channel);
+    const auto dIndex = o2::tof::Geo::getCHFromECH(eIndex);
+    if (dIndex < 0) {
       continue;
-    auto sector = dIndex / 8736;
-    auto sector_ = dIndex % 8736;
-    auto strip = sector_ / 96;
-    auto strip_ = sector_ % 96;
-    auto strrow_ = strip_ % 48;
-    auto fea = strrow_ / 12;
+    }
+    const auto sector = dIndex / 8736;
+    const auto sector_ = dIndex % 8736;
+    const auto strip = sector_ / 96;
+    const auto strip_ = sector_ % 96;
+    const auto strrow_ = strip_ % 48;
+    const auto fea = strrow_ / 12;
 
     IntegratedTime[sector][strip] += time;
     FeaCounter[sector][strip][fea] += indexcounter;
     IntegratedTimeFea[sector][strip][fea] += time;
   } // end loop over index
 
-  for (int isector = 0; isector < nsectors; isector++) {
-    for (int istrip = 0; istrip < nstrips; istrip++) {
-      auto itime = IntegratedTime[isector][istrip];
+  for (unsigned int isector = 0; isector < nsectors; isector++) {
+    for (unsigned int istrip = 0; istrip < nstrips; istrip++) {
+      const auto itime = IntegratedTime[isector][istrip];
 
-      if (itime < 1.e-6)
+      // start measure time from 1 micro second
+      if (itime < 1.e-6) {
         continue;
+      }
 
       for (int iFea = 0; iFea < 4; iFea++) {
-        auto indexcounterFea = FeaCounter[isector][istrip][iFea];
-        auto timeFea = IntegratedTimeFea[isector][istrip][iFea];
+        const auto indexcounterFea = FeaCounter[isector][istrip][iFea];
+        const auto timeFea = IntegratedTimeFea[isector][istrip][iFea];
 
-        if (timeFea < 1.e-6)
+        // start measure time from 1 micro second
+        if (timeFea < 1.e-6) {
           continue;
+        }
 
-        auto rateFea = (float)indexcounterFea / timeFea;
+        const auto rateFea = (float)indexcounterFea / timeFea;
 
         hFeaStripNoise->SetBinContent(isector * 4 + (3 - iFea) + 1, istrip + 1, rateFea);
       } // end loop over Feas
@@ -351,8 +360,8 @@ void TaskRaw::monitorData(o2::framework::ProcessingContext& ctx)
     for (auto const& input : iit) {
       /** input **/
       const auto* headerIn = o2::framework::DataRefUtils::getHeader<o2::header::DataHeader*>(input);
-      auto payloadIn = input.payload;
-      auto payloadInSize = headerIn->payloadSize;
+      const auto payloadIn = input.payload;
+      const auto payloadInSize = headerIn->payloadSize;
       mDecoderRaw.setDecoderBuffer(payloadIn);
       mDecoderRaw.setDecoderBufferSize(payloadInSize);
       mDecoderRaw.decode();
