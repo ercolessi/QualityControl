@@ -57,7 +57,7 @@ class RawDataDecoder final : public DecoderBase
   static constexpr unsigned int ncrates = 72;    /// Number of crates
   static constexpr unsigned int ntrms = 10;      /// Number of TRMs per crate
   static constexpr unsigned int ntrmschains = 2; /// Number of TRMChains per TRM
-  static const int nsectors = 72;                /// Number of sectors * Feas
+  static const int nsectors = 18;                /// Number of sectors
   static const int nstrips = 91;                 /// Number of strips per sector
 
   /// Initialize noise analysis variables
