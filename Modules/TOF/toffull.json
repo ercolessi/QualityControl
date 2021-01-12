@@ -71,7 +71,7 @@
         "dataSource": [
           {
             "type": "Task",
-            "name": "TaskDiagnostics",
+            "name": "TaskRaw",
             "MOs": [
               "RDHCounterCrate0"
             ]
@@ -90,7 +90,7 @@
         "dataSource": [
           {
             "type": "Task",
-            "name": "TaskCompressedData",
+            "name": "TaskRaw",
             "MOs": [
               "hDiagnostic"
             ]
