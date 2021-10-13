@@ -32,13 +32,17 @@ namespace o2::quality_control_modules::tof
 
 void CheckRawMultiplicity::configure(std::string)
 {
-  mMinRawHits = 10;
-  mMaxRawHits = 150;
+  if (auto param = mCustomParameters.find("RunningMode"); param != mCustomParameters.end()) {
+    mRunningMode = ::atoi(param->second.c_str());
+  }
   if (auto param = mCustomParameters.find("MinRawHits"); param != mCustomParameters.end()) {
     mMinRawHits = ::atof(param->second.c_str());
   }
   if (auto param = mCustomParameters.find("MaxRawHits"); param != mCustomParameters.end()) {
     mMaxRawHits = ::atof(param->second.c_str());
+  }
+  if (auto param = mCustomParameters.find("FractAtZeroMult"); param != mCustomParameters.end()) {
+    mFractAtZeroMult = ::atof(param->second.c_str());
   }
 }
 
@@ -47,42 +51,13 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
 
   Quality result = Quality::Null;
 
-  // Int_t nTrgCl = 0; // AliQADataMaker::GetNTrigClasses();
-  // Int_t nToDrawTrgCl;
-
-  /*customize the summary image*/
-  // bool drawRawsSumImage = kTRUE;                       //hTOF_Raws: kTRUE shows it in the summary image, kFALSE does not
-  // bool drawRawsTimeSumImage = kTRUE;                   //hTOF_RawsTime: kTRUE shows it in the summary image, kFALSE does not
-  // bool drawRawsToTSumImage = kTRUE;                    //hTOF_RawsToT: kTRUE shows it in the summary image, kFALSE does not
-  // TString ClToDraw[] = { "kINT7", "kCalibBarell", "0" }; //trigger classes shown in the summary image (it MUST end with "0")
-
-  // Int_t flag = AliQAv1::kNULLBit;
-  // Int_t trgCl;
-  // Int_t trigId = 0;
-  // bool suffixTrgCl = kFALSE;
-
-  // TString histname = h->GetName();
-  // for (trgCl = 0; trgCl < nTrgCl; trgCl++)
-  //   if (histname.EndsWith(AliQADataMaker::GetTrigClassName(trgCl)))
-  //     suffixTrgCl = kTRUE;
-  // if ((histname.EndsWith("TOFRawsMulti")) || (histname.Contains("TOFRawsMulti") && suffixTrgCl)) {
-
   for (auto& [moName, mo] : *moMap) {
     (void)moName;
     if (mo->getName() == "TOFRawsMulti") {
       auto* h = dynamic_cast<TH1I*>(mo->getObject());
-      // if (!suffixTrgCl)
-      //   h->SetBit(AliQAv1::GetImageBit(), drawRawsSumImage);
-      // if (suffixTrgCl) {
-      //   h->SetBit(AliQAv1::GetImageBit(), kFALSE); //clones not shown by default
-      //   for (int i = 0; i < nToDrawTrgCl; i++) {
-      //     if (histname.EndsWith(ClToDraw[i]))
-      //       h->SetBit(AliQAv1::GetImageBit(), kTRUE);
-      //   }
-      // }
       if (h->GetEntries() == 0) { // Histogram is empty
         result = Quality::Medium;
-        shifter_msg = "No counts!";
+        shifter_msg.push_back("No counts!");
       } else { // Histogram is non empty
         mRawHitsMean = h->GetMean();
         mRawHitsZeroMultIntegral = h->Integral(1, 1);
@@ -92,18 +67,18 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
         if (mRawHitsIntegral == 0) { //if only "0 hits per event" bin is filled -> error
           if (h->GetBinContent(1) > 0) {
             result = Quality::Bad;
-            shifter_msg = "Only events at 0 filled!";
+            shifter_msg.push_back("Only events at 0 filled!");
           }
         } else {
           // if (AliRecoParam::ConvertIndex(specie) == AliRecoParam::kCosmic) {
           if (0) { // TODO: this is only for cosmics, how to check? Re: from the configuration of the checker!
             if (mRawHitsMean < 10.) {
               result = Quality::Good;
-              shifter_msg = "Average within limits, OK!";
+              shifter_msg.push_back("Average within limits, OK!");
               // flag = AliQAv1::kINFO;
             } else {
               result = Quality::Medium;
-              shifter_msg = "Average outside limits!";
+              shifter_msg.push_back("Average outside limits!");
               // flag = AliQAv1::kWARNING;
             }
           } else { // Running with collisions
@@ -120,15 +95,15 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
                 // if (!histname.Contains("INT7") && (mRawHitsMean > 100.)) {
                 if ((mRawHitsMean > 100.)) {
                   result = Quality::Medium;
-                  shifter_msg = "Average outside limits!";
+                  shifter_msg.push_back("Average outside limits!");
                 } else {
                   // if (histname.Contains("INT7") && (isINT7AverageLow || isINT7AverageHigh)) {
                   if ((isINT7AverageLow || isINT7AverageHigh)) {
                     result = Quality::Medium;
-                    shifter_msg = "Average outside limits!";
+                    shifter_msg.push_back("Average outside limits!");
                   } else {
                     result = Quality::Good;
-                    shifter_msg = "Average within limits, OK!";
+                    shifter_msg.push_back("Average within limits, OK!");
                   }
                 }
               }
@@ -137,14 +112,15 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
             else { // High multiplicity running e.g. Pb-Pb
               if (isLowMultContentHigh) {
                 result = Quality::Medium;
-                shifter_msg = Form("Low-multiplicity counts are high\n(%.2f higher than total)!", mFractAtLowMult);
+                shifter_msg.push_back("Low-multiplicity counts are high");
+                shifter_msg.push_back(Form("(%.2f higher than total)!", mFractAtLowMult));
               } else if (mRawHitsMean > mMaxTOFRawHitsPbPb) {
                 //assume that good range of multi in PbPb goes from 20 to 500 tracks
                 result = Quality::Medium;
-                shifter_msg = Form("Average higher than expected (%.2f)!", mMaxTOFRawHitsPbPb);
+                shifter_msg.push_back(Form("Average higher than expected (%.2f)!", mMaxTOFRawHitsPbPb));
               } else {
                 result = Quality::Good;
-                shifter_msg = "Average within limits";
+                shifter_msg.push_back("Average within limits");
               }
             }
           }
@@ -169,10 +145,10 @@ void CheckRawMultiplicity::beautify(std::shared_ptr<MonitorObject> mo, Quality c
     msg->AddText(Form("Default message for %s", mo->GetName()));
     msg->SetName(Form("%s_msg", mo->GetName()));
     msg->Clear();
-    TObjArray* txt_arr = shifter_msg.Tokenize("\n");
-    for (Int_t i = 0; i < txt_arr->GetEntries(); i++) {
-      msg->AddText(txt_arr->At(i)->GetName());
+    for (const auto& line : shifter_msg) {
+      msg->AddText(line.c_str());
     }
+    shifter_msg.clear();
 
     if (checkResult == Quality::Good) {
       msg->AddText(Form("Mean value = %5.2f", mRawHitsMean));

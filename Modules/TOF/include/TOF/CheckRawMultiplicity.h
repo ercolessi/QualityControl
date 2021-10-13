@@ -43,13 +43,13 @@ class CheckRawMultiplicity : public o2::quality_control::checker::CheckInterface
 
  private:
   /// Minimum value of TOF raw hit multiplicity
-  float mMinRawHits;
+  float mMinRawHits = 10;
   /// Maximum value of TOF raw hit multiplicity
-  float mMaxRawHits;
+  float mMaxRawHits = 150;
   /// Fraction of the total integral which are considered Ok at 0 mult
-  const float mFractAtZeroMult = 0.75;
+  float mFractAtZeroMult = 0.75;
   /// Fraction of the total integral which are considered Ok at low mult
-  const float mFractAtLowMult = 0.75;
+  float mFractAtLowMult = 0.75;
   /// Maximum average TOF raw hit multiplicity in Pb-Pb
   const float mMaxTOFRawHitsPbPb = 500;
   /// Mean of the TOF hit multiplicity histogram
@@ -61,7 +61,7 @@ class CheckRawMultiplicity : public o2::quality_control::checker::CheckInterface
   /// Number of events with TOF hits multiplicity > 0
   float mRawHitsIntegral = 0.f;
   /// Message to print
-  TString shifter_msg = "";
+  std::vector<std::string> shifter_msg{};
 
   ClassDefOverride(CheckRawMultiplicity, 1);
 };
