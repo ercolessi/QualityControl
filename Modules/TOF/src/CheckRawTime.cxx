@@ -31,18 +31,12 @@ namespace o2::quality_control_modules::tof
 
 void CheckRawTime::configure(std::string)
 {
-  mMinRawTime = 175.f;
-  mMaxRawTime = 250.f;
   if (auto param = mCustomParameters.find("MinRawTime"); param != mCustomParameters.end()) {
     mMinRawTime = ::atof(param->second.c_str());
   }
   if (auto param = mCustomParameters.find("MaxRawTime"); param != mCustomParameters.end()) {
     mMaxRawTime = ::atof(param->second.c_str());
   }
-  // if (AliRecoParam::ConvertIndex(specie) == AliRecoParam::kCosmic) {
-  //   minTOFrawTime = 150.; //ns
-  //   maxTOFrawTime = 250.; //ns
-  // }
 }
 
 Quality CheckRawTime::check(std::map<std::string, std::shared_ptr<MonitorObject>>* moMap)
@@ -50,20 +44,8 @@ Quality CheckRawTime::check(std::map<std::string, std::shared_ptr<MonitorObject>
   auto mo = moMap->begin()->second;
   Quality result = Quality::Null;
 
-  // const Double_t binWidthTOFrawTime = 2.44;
-
-  // if ((histname.EndsWith("RawsTime")) || (histname.Contains("RawsTime") && suffixTrgCl)) {
   if (mo->getName().find("RawsTime") != std::string::npos) {
     auto* h = dynamic_cast<TH1F*>(mo->getObject());
-    // if (!suffixTrgCl)
-    //   h->SetBit(AliQAv1::GetImageBit(), drawRawsTimeSumImage);
-    // if (suffixTrgCl) {
-    //   h->SetBit(AliQAv1::GetImageBit(), kFALSE);
-    //   for (int i = 0; i < nToDrawTrgCl; i++) {
-    //     if (histname.EndsWith(ClToDraw[i]))
-    //       h->SetBit(AliQAv1::GetImageBit(), kTRUE);
-    //   }
-    // }
     if (h->GetEntries() == 0) {
       result = Quality::Medium;
     } else {
@@ -105,7 +87,7 @@ void CheckRawTime::beautify(std::shared_ptr<MonitorObject> mo, Quality checkResu
     if (checkResult == Quality::Good) {
       ILOG(Info, Support) << "Quality::Good, setting to green";
       msg->Clear();
-      msg->AddText("Mean inside limits: OK!!!");
+      msg->AddText("Mean inside limits: OK");
       msg->AddText(Form("Allowed range: %3.0f-%3.0f ns", mMinRawTime, mMaxRawTime));
       msg->SetFillColor(kGreen);
       msg->SetTextColor(kBlack);

@@ -40,10 +40,13 @@ class CheckRawTime : public o2::quality_control::checker::CheckInterface
   std::string getAcceptedType() override;
 
  private:
+  // Running configurable parameters
   /// Minimum value for TOF average raw time
-  float mMinRawTime;
+  float mMinRawTime = 175.f;
   /// Maximum value for TOF average raw time
-  float mMaxRawTime;
+  float mMaxRawTime = 250.f;
+
+  // User variables
   /// Mean of the TOF raw time distribution
   float mRawTimeMean = 0.f;
   /// Integral of the TOF raw time distribution in the peak region i.e. within minTOFrawTime and maxTOFrawTime
