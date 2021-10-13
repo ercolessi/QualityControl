@@ -222,7 +222,7 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
   int currentrow = 0;
   // Loop on readout windows
   for (const auto& row : rows) {
-    for (int i = 0; i < RawDataDecoder::ncrates; i++) { // Loop on all crates
+    for (unsigned int i = 0; i < RawDataDecoder::ncrates; i++) { // Loop on all crates
       mOrbitDDL->Fill(i, currentrow / 3.0, !row.isEmptyCrate(i));
       //
       if (row.isEmptyCrate(i)) { // Only for active crates
@@ -291,7 +291,7 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
 
   //To complete the second TF in case it receives orbits
   for (; currentrow < 768; currentrow++) {
-    for (int i = 0; i < RawDataDecoder::ncrates; i++) { // Loop on all crates
+    for (unsigned int i = 0; i < RawDataDecoder::ncrates; i++) { // Loop on all crates
       mOrbitDDL->Fill(i, currentrow / 3.0, 0);
     }
   }
@@ -300,7 +300,7 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
 void TaskDigits::endOfCycle()
 {
   ILOG(Info, Support) << "endOfCycle" << ENDM;
-  for (int i = 0; i < RawDataDecoder::nstrips; i++) {
+  for (unsigned int i = 0; i < RawDataDecoder::nstrips; i++) {
     mHitCounterPerStrip[i].FillHistogram(mTOFRawHitMap.get(), i + 1);
   }
 }
@@ -314,7 +314,7 @@ void TaskDigits::reset()
 {
   // clean all the monitor objects here
   ILOG(Info, Support) << "Resetting the counters" << ENDM;
-  for (int i = 0; i < RawDataDecoder::nstrips; i++) {
+  for (unsigned int i = 0; i < RawDataDecoder::nstrips; i++) {
     mHitCounterPerStrip[i].Reset();
   }
   mHitCounterPerChannel.Reset();

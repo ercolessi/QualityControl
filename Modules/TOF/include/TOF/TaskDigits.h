@@ -109,9 +109,9 @@ class TaskDigits final : public TaskInterface
   // std::shared_ptr<TH1I> mNfiredMacropad = nullptr;          /// Number of fired TOF macropads per event
 
   // Counters
-  static constexpr nchannels = RawDataDecoder::ncrates * RawDataDecoder::nstrips * 24;
-  Counter<RawDataDecoder::ncrates, nullptr> mHitCounterPerStrip[RawDataDecoder::nstrips]; /// Hit map counter in the crate, one per strip
-  Counter<nchannels, nullptr> mHitCounterPerChannel;                                      /// Hit map counter in the single channel
+  static constexpr unsigned int nchannels = RawDataDecoder::ncrates * RawDataDecoder::nstrips * 24; /// Number of channels
+  Counter<RawDataDecoder::ncrates, nullptr> mHitCounterPerStrip[RawDataDecoder::nstrips];           /// Hit map counter in the crate, one per strip
+  Counter<nchannels, nullptr> mHitCounterPerChannel;                                                /// Hit map counter in the single channel
 };
 
 } // namespace o2::quality_control_modules::tof
