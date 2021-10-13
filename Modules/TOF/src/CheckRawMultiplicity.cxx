@@ -35,6 +35,14 @@ void CheckRawMultiplicity::configure(std::string)
   if (auto param = mCustomParameters.find("RunningMode"); param != mCustomParameters.end()) {
     mRunningMode = ::atoi(param->second.c_str());
   }
+  switch (mRunningMode) {
+    case kModeCollisions:
+    case kModeCosmics:
+      break;
+    default:
+      ILOG(Fatal, Support) << "Run mode not correct " << mRunningMode << ENDM;
+      break;
+  }
   if (auto param = mCustomParameters.find("MinRawHits"); param != mCustomParameters.end()) {
     mMinRawHits = ::atof(param->second.c_str());
   }
@@ -77,12 +85,34 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
         } else {
           switch (mRunningMode) {
             case kModeCollisions: // Collisions
-              /* code */
+              const bool isZeroBinContentHigh = (mRawHitsZeroMultIntegral > (mMaxFractAtZeroMult * mRawHitsIntegral));
+              const bool isLowMultContentHigh = (mRawHitsLowMultIntegral > (mMaxFractAtLowMult * mRawHitsIntegral));
+              const bool isAverageLow = (mRawHitsMean < mMinRawHits);
+              const bool isAverageHigh = (mRawHitsMean > mMaxRawHits);
+
+              if (isZeroBinContentHigh) {
+                result = Quality::Medium;
+                shifter_msg.push_back("Zero-multiplicity counts are high");
+                shifter_msg.push_back(Form("(%.2f higher than total)!", mMaxFractAtZeroMult));
+              } else if (isLowMultContentHigh) {
+                result = Quality::Medium;
+                shifter_msg.push_back("Low-multiplicity counts are high");
+                shifter_msg.push_back(Form("(%.2f higher than total)!", mMaxFractAtLowMult));
+              } else if (isAverageLow) {
+                result = Quality::Medium;
+                shifter_msg.push_back(Form("Average lower than expected (%.2f)!", mMinRawHits));
+              } else if (isAverageHigh) {
+                result = Quality::Medium;
+                shifter_msg.push_back(Form("Average higher than expected (%.2f)!", mMaxRawHits));
+              } else {
+                result = Quality::Good;
+                shifter_msg.push_back("Average within limits");
+              }
               break;
-            case kModeCosmics: // Collisions
+            case kModeCosmics: // Cosmics
               if (mRawHitsMean < 10.) {
                 result = Quality::Good;
-                shifter_msg.push_back("Average within limits, OK!");
+                shifter_msg.push_back("Average within limits");
                 // flag = AliQAv1::kINFO;
               } else {
                 result = Quality::Medium;
@@ -91,51 +121,8 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
               }
               break;
             default:
+              ILOG(Error, Support) << "Not running in correct mode " << mRunningMode;
               break;
-          }
-          if (0) { // TODO: this is only for cosmics, how to check? Re: from the configuration of the checker!
-          } else { // Running with collisions
-            const bool isZeroBinContentHigh = (mRawHitsZeroMultIntegral > (mMaxFractAtZeroMult * mRawHitsIntegral));
-            const bool isLowMultContentHigh = (mRawHitsLowMultIntegral > (mMaxFractAtLowMult * mRawHitsIntegral));
-            const bool isINT7AverageLow = (mRawHitsMean < mMinRawHits);
-            const bool isINT7AverageHigh = (mRawHitsMean > mMaxRawHits);
-
-            // if (AliRecoParam::ConvertIndex(specie) == AliRecoParam::kLowMult) {
-            if (0) { // TODO: Low multiplicity running, how to check if it is pp? Probably this can be simplified in the json
-              if (isZeroBinContentHigh && (mRawHitsMean > 10.)) {
-
-              } else {
-                // if (!histname.Contains("INT7") && (mRawHitsMean > 100.)) {
-                if ((mRawHitsMean > 100.)) {
-                  result = Quality::Medium;
-                  shifter_msg.push_back("Average outside limits!");
-                } else {
-                  // if (histname.Contains("INT7") && (isINT7AverageLow || isINT7AverageHigh)) {
-                  if ((isINT7AverageLow || isINT7AverageHigh)) {
-                    result = Quality::Medium;
-                    shifter_msg.push_back("Average outside limits!");
-                  } else {
-                    result = Quality::Good;
-                    shifter_msg.push_back("Average within limits, OK!");
-                  }
-                }
-              }
-            }
-            // } else if ((AliRecoParam::ConvertIndex(specie) == AliRecoParam::kHighMult) && (isLowMultContentHigh || (mRawHitsMean > 500.))) {
-            else { // High multiplicity running e.g. Pb-Pb
-              if (isLowMultContentHigh) {
-                result = Quality::Medium;
-                shifter_msg.push_back("Low-multiplicity counts are high");
-                shifter_msg.push_back(Form("(%.2f higher than total)!", mMaxFractAtLowMult));
-              } else if (mRawHitsMean > mMaxTOFRawHitsPbPb) {
-                //assume that good range of multi in PbPb goes from 20 to 500 tracks
-                result = Quality::Medium;
-                shifter_msg.push_back(Form("Average higher than expected (%.2f)!", mMaxTOFRawHitsPbPb));
-              } else {
-                result = Quality::Good;
-                shifter_msg.push_back("Average within limits");
-              }
-            }
           }
         }
       }
