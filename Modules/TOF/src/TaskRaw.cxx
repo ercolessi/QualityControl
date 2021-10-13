@@ -337,28 +337,28 @@ void TaskRaw::initialize(o2::framework::InitContext& /*ctx*/)
 
   // RDH
   mHistoRDH = std::make_shared<TH2F>("RDHCounter", "RDH Diagnostics;RDH Word;Crate;Words",
-                           RawDataDecoder::nwords, 0, RawDataDecoder::nwords,
-                           RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates));
-  mDecoderRaw.mCounterRDH[0].MakeHistogram(mHistoRDH.get();
-                                           getObjectsManager()->startPublishing(mHistoRDH.get());
-                                           // DRM
-                                           mHistoDRM = std::make_shared<TH2F>("DRMCounter", "DRM Diagnostics;DRM Word;Crate;Words",
-                                                                              RawDataDecoder::nwords, 0, RawDataDecoder::nwords,
-                                                                              RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates));
-  mDecoderRaw.mCounterDRM[0].MakeHistogram(mHistoDRM.get();
-                                           getObjectsManager()->startPublishing(mHistoDRM.get());
-                                           // LTM
-                                           mHistoLTM = std::make_shared<TH2F>("LTMCounter", "LTM Diagnostics;LTM Word;Crate;Words",
-                                                                              RawDataDecoder::nwords, 0, RawDataDecoder::nwords,
-                                                                              RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates));
-  mDecoderRaw.mCounterLTM[0].MakeHistogram(mHistoLTM.get();
+                                     RawDataDecoder::nwords, 0, RawDataDecoder::nwords,
+                                     RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
+  mDecoderRaw.mCounterRDH[0].MakeHistogram(mHistoRDH.get());
+  getObjectsManager()->startPublishing(mHistoRDH.get());
+  // DRM
+  mHistoDRM = std::make_shared<TH2F>("DRMCounter", "DRM Diagnostics;DRM Word;Crate;Words",
+                                     RawDataDecoder::nwords, 0, RawDataDecoder::nwords,
+                                     RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
+  mDecoderRaw.mCounterDRM[0].MakeHistogram(mHistoDRM.get());
+  getObjectsManager()->startPublishing(mHistoDRM.get());
+  // LTM
+  mHistoLTM = std::make_shared<TH2F>("LTMCounter", "LTM Diagnostics;LTM Word;Crate;Words",
+                                     RawDataDecoder::nwords, 0, RawDataDecoder::nwords,
+                                     RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
+  mDecoderRaw.mCounterLTM[0].MakeHistogram(mHistoLTM.get());
   getObjectsManager()->startPublishing(mHistoLTM.get());
   // TRMs
   for (unsigned int j = 0; j < RawDataDecoder::ntrms; j++) {
     mHistoTRM[j] = std::make_shared<TH2F>(Form("TRMCounterSlot%02i", j + 3), Form("TRM Slot %i Diagnostics;TRM Word;Crate;Words", j + 3),
                                 RawDataDecoder::nwords, 0, RawDataDecoder::nwords,
-                                RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates));
-    mDecoderRaw.mCounterTRM[0][j].MakeHistogram(mHistoTRM[j].get();
+                                RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
+    mDecoderRaw.mCounterTRM[0][j].MakeHistogram(mHistoTRM[j].get());
     getObjectsManager()->startPublishing(mHistoTRM[j].get());
   }
   // Whole Crates
