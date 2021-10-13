@@ -39,15 +39,15 @@
 namespace o2::quality_control_modules::tof
 {
 
-Int_t TaskDigits::fgNbinsMultiplicity = 2000;       /// Number of bins in multiplicity plot
-Int_t TaskDigits::fgRangeMinMultiplicity = 0;       /// Min range in multiplicity plot
-Int_t TaskDigits::fgRangeMaxMultiplicity = 1000;    /// Max range in multiplicity plot
-Int_t TaskDigits::fgNbinsTime = 250;                /// Number of bins in time plot
-const Float_t TaskDigits::fgkNbinsWidthTime = 2.44; /// Width of bins in time plot
-Float_t TaskDigits::fgRangeMinTime = 0.0;           /// Range min in time plot
-Float_t TaskDigits::fgRangeMaxTime = 620.0;         /// Range max in time plot
-Int_t TaskDigits::fgCutNmaxFiredMacropad = 50;      /// Cut on max number of fired macropad
-const Int_t TaskDigits::fgkFiredMacropadLimit = 50; /// Limit on cut on number of fired macropad
+int TaskDigits::fgNbinsMultiplicity = 2000;       /// Number of bins in multiplicity plot
+int TaskDigits::fgRangeMinMultiplicity = 0;       /// Min range in multiplicity plot
+int TaskDigits::fgRangeMaxMultiplicity = 1000;    /// Max range in multiplicity plot
+int TaskDigits::fgNbinsTime = 250;                /// Number of bins in time plot
+const float TaskDigits::fgkNbinsWidthTime = 2.44; /// Width of bins in time plot
+float TaskDigits::fgRangeMinTime = 0.0;           /// Range min in time plot
+float TaskDigits::fgRangeMaxTime = 620.0;         /// Range max in time plot
+int TaskDigits::fgCutNmaxFiredMacropad = 50;      /// Cut on max number of fired macropad
+const int TaskDigits::fgkFiredMacropadLimit = 50; /// Limit on cut on number of fired macropad
 
 TaskDigits::TaskDigits() : TaskInterface()
 {
@@ -249,26 +249,26 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
   // Get TOF Readout window
   const auto rows = ctx.inputs().get<std::vector<o2::tof::ReadoutWindowData>>("readoutwin");
 
-  Int_t eta, phi;       // Eta and phi indices
-  Int_t det[5] = { 0 }; // Coordinates
-  Int_t strip = 0;      // Strip
-  Float_t tdc_time = 0;
-  Float_t tot_time = 0;
+  int eta, phi;       // Eta and phi indices
+  int det[5] = { 0 }; // Coordinates
+  int strip = 0;      // Strip
+  float tdc_time = 0;
+  float tot_time = 0;
   // SM in side I: 14-17, 0-4 -> 4 + 5
   // SM in side O: 5-13 -> 9
   // phi is counted every pad starting from SM 0.
   // There are 48 pads per SM. Side I is from phi 0:48*4 and 48*14:48*18
-  const Int_t phi_I1 = 48 * 4;
-  const Int_t phi_I2 = 48 * 14;
+  const int phi_I1 = 48 * 4;
+  const int phi_I2 = 48 * 14;
   // eta is counted every half strip starting from strip 0.
   // Halves strips in side A 0-90, in side C 91-181
-  const Int_t half_eta = 91;
+  const int half_eta = 91;
   Bool_t isSectorI = kFALSE;
-  Int_t ndigits[4] = { 0 }; // Number of digits per side I/A,O/A,I/C,O/C
+  int ndigits[4] = { 0 }; // Number of digits per side I/A,O/A,I/C,O/C
 
   mROWSize->Fill(rows.size() / 3.0);
 
-  Int_t currentrow = 0;
+  int currentrow = 0;
   // Loop on readout windows
   for (const auto& row : rows) {
     for (int i = 0; i < 72; i++) { // Loop on all crates
