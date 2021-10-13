@@ -51,15 +51,15 @@ class TaskDigits final : public TaskInterface
   void endOfActivity(Activity& activity) override;
   void reset() override;
 
-  static int fgNbinsMultiplicity;         /// Number of bins in multiplicity plot
-  static int fgRangeMinMultiplicity;      /// Min range in multiplicity plot
-  static int fgRangeMaxMultiplicity;      /// Max range in multiplicity plot
-  static int fgNbinsTime;                 /// Number of bins in time plot
-  static const float fgkNbinsWidthTime;   /// Width of bins in time plot
-  static float fgRangeMinTime;            /// Range min in time plot
-  static float fgRangeMaxTime;            /// Range max in time plot
-  static int fgCutNmaxFiredMacropad;      /// Cut on max number of fired macropad
-  static const int fgkFiredMacropadLimit; /// Limit on cut on number of fired macropad
+  static const int fgNbinsMultiplicity;    /// Number of bins in multiplicity plot
+  static const int fgRangeMinMultiplicity; /// Min range in multiplicity plot
+  static const int fgRangeMaxMultiplicity; /// Max range in multiplicity plot
+  static const int fgNbinsTime;            /// Number of bins in time plot
+  static const float fgkNbinsWidthTime;    /// Width of bins in time plot
+  static const float fgRangeMinTime;       /// Range min in time plot
+  static const float fgRangeMaxTime;       /// Range max in time plot
+  // static const int fgCutNmaxFiredMacropad; /// Cut on max number of fired macropad
+  // static const int fgkFiredMacropadLimit;  /// Limit on cut on number of fired macropad
 
  private:
   // Event info

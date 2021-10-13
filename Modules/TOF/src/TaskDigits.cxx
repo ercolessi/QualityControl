@@ -39,15 +39,15 @@
 namespace o2::quality_control_modules::tof
 {
 
-int TaskDigits::fgNbinsMultiplicity = 2000;       /// Number of bins in multiplicity plot
-int TaskDigits::fgRangeMinMultiplicity = 0;       /// Min range in multiplicity plot
-int TaskDigits::fgRangeMaxMultiplicity = 1000;    /// Max range in multiplicity plot
-int TaskDigits::fgNbinsTime = 250;                /// Number of bins in time plot
-const float TaskDigits::fgkNbinsWidthTime = 2.44; /// Width of bins in time plot
-float TaskDigits::fgRangeMinTime = 0.0;           /// Range min in time plot
-float TaskDigits::fgRangeMaxTime = 620.0;         /// Range max in time plot
-int TaskDigits::fgCutNmaxFiredMacropad = 50;      /// Cut on max number of fired macropad
-const int TaskDigits::fgkFiredMacropadLimit = 50; /// Limit on cut on number of fired macropad
+const int TaskDigits::fgNbinsMultiplicity = 2000;                   /// Number of bins in multiplicity plot
+const int TaskDigits::fgRangeMinMultiplicity = 0;                   /// Min range in multiplicity plot
+const int TaskDigits::fgRangeMaxMultiplicity = fgNbinsMultiplicity; /// Max range in multiplicity plot
+const int TaskDigits::fgNbinsTime = 250;                            /// Number of bins in time plot
+const float TaskDigits::fgkNbinsWidthTime = 2.44;                   /// Width of bins in time plot
+const float TaskDigits::fgRangeMinTime = 0.0;                       /// Range min in time plot
+const float TaskDigits::fgRangeMaxTime = 620.0;                     /// Range max in time plot
+// const int TaskDigits::fgCutNmaxFiredMacropad = 50;   /// Cut on max number of fired macropad
+// const int TaskDigits::fgkFiredMacropadLimit = 50;    /// Limit on cut on number of fired macropad
 
 TaskDigits::TaskDigits() : TaskInterface()
 {
