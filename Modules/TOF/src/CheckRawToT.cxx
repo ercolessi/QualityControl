@@ -32,8 +32,6 @@ namespace o2::quality_control_modules::tof
 
 void CheckRawToT::configure(std::string)
 {
-  mMinRawToT = 10.; // ns
-  mMaxRawToT = 15.; // ns
 
   if (auto param = mCustomParameters.find("MinRawTime"); param != mCustomParameters.end()) {
     mMinRawToT = ::atof(param->second.c_str());
@@ -51,15 +49,6 @@ Quality CheckRawToT::check(std::map<std::string, std::shared_ptr<MonitorObject>>
   // if ((histname.EndsWith("RawsToT")) || (histname.Contains("RawsToT") && suffixTrgCl)) {
   if (mo->getName().find("RawsToT") != std::string::npos) {
     auto* h = dynamic_cast<TH1F*>(mo->getObject());
-    // if (!suffixTrgCl)
-    //   h->SetBit(AliQAv1::GetImageBit(), drawRawsToTSumImage);
-    // if (suffixTrgCl) {
-    //   h->SetBit(AliQAv1::GetImageBit(), kFALSE);
-    //   for (int i = 0; i < nToDrawTrgCl; i++) {
-    //     if (histname.EndsWith(ClToDraw[i]))
-    //       h->SetBit(AliQAv1::GetImageBit(), kTRUE);
-    //   }
-    // }
     if (h->GetEntries() == 0) {
       result = Quality::Medium;
     } else {
@@ -92,7 +81,7 @@ void CheckRawToT::beautify(std::shared_ptr<MonitorObject> mo, Quality checkResul
     if (checkResult == Quality::Good) {
       ILOG(Info, Support) << "Quality::Good, setting to green";
       msg->Clear();
-      msg->AddText("Mean inside limits: OK!!!");
+      msg->AddText("Mean inside limits: OK");
       msg->AddText(Form("Allowed range: %3.1f-%3.1f ns", mMinRawToT, mMaxRawToT));
       msg->SetFillColor(kGreen);
       msg->SetTextColor(kBlack);
@@ -107,7 +96,7 @@ void CheckRawToT::beautify(std::shared_ptr<MonitorObject> mo, Quality checkResul
     } else if (checkResult == Quality::Medium) {
       ILOG(Info, Support) << "Quality::medium, setting to yellow";
       msg->Clear();
-      msg->AddText("No entries. Check TOF TWiki");
+      msg->AddText("No entries.");
       msg->SetFillColor(kYellow);
       msg->SetTextColor(kBlack);
     }
