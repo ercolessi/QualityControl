@@ -20,6 +20,7 @@
 
 #include "QualityControl/TaskInterface.h"
 #include "Base/Counter.h"
+#include "TOF/TaskRaw.h"
 
 class TH1F;
 class TH2F;
@@ -58,8 +59,6 @@ class TaskDigits final : public TaskInterface
   static const float fgkNbinsWidthTime;    /// Width of bins in time plot
   static const float fgRangeMinTime;       /// Range min in time plot
   static const float fgRangeMaxTime;       /// Range max in time plot
-  // static const int fgCutNmaxFiredMacropad; /// Cut on max number of fired macropad
-  // static const int fgkFiredMacropadLimit;  /// Limit on cut on number of fired macropad
 
  private:
   // Event info
@@ -110,8 +109,9 @@ class TaskDigits final : public TaskInterface
   // std::shared_ptr<TH1I> mNfiredMacropad = nullptr;          /// Number of fired TOF macropads per event
 
   // Counters
-  Counter<72, nullptr> mHitCounterPerStrip[91];         /// Hit map counter in the crate, one per strip
-  Counter<72 * 91 * 24, nullptr> mHitCounterPerChannel; /// Hit map counter in the single channel
+  static constexpr nchannels = RawDataDecoder::ncrates * RawDataDecoder::nstrips * 24;
+  Counter<RawDataDecoder::ncrates, nullptr> mHitCounterPerStrip[RawDataDecoder::nstrips]; /// Hit map counter in the crate, one per strip
+  Counter<nchannels, nullptr> mHitCounterPerChannel;                                      /// Hit map counter in the single channel
 };
 
 } // namespace o2::quality_control_modules::tof

@@ -46,8 +46,6 @@ const int TaskDigits::fgNbinsTime = 250;                            /// Number o
 const float TaskDigits::fgkNbinsWidthTime = 2.44;                   /// Width of bins in time plot
 const float TaskDigits::fgRangeMinTime = 0.0;                       /// Range min in time plot
 const float TaskDigits::fgRangeMaxTime = 620.0;                     /// Range max in time plot
-// const int TaskDigits::fgCutNmaxFiredMacropad = 50;   /// Cut on max number of fired macropad
-// const int TaskDigits::fgkFiredMacropadLimit = 50;    /// Limit on cut on number of fired macropad
 
 TaskDigits::TaskDigits() : TaskInterface()
 {
@@ -56,13 +54,13 @@ TaskDigits::TaskDigits() : TaskInterface()
 void TaskDigits::initialize(o2::framework::InitContext& /*ctx*/)
 {
   ILOG(Info, Support) << "initialize TaskDigits" << ENDM;
-  mOrbitID = std::make_shared<TH2F>("OrbitID", "OrbitID;OrbitID % 1048576;Crate", 1024, 0, 1048576, 72, 0, 72);
+  mOrbitID = std::make_shared<TH2F>("OrbitID", "OrbitID;OrbitID % 1048576;Crate", 1024, 0, 1048576, RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
   getObjectsManager()->startPublishing(mOrbitID.get());
 
-  mTimeBC = std::make_shared<TH2F>("TimeBC", "Raw BC Time;BC time (24.4 ps);Crate", 1024, 0., 1024., 72, 0, 72);
+  mTimeBC = std::make_shared<TH2F>("TimeBC", "Raw BC Time;BC time (24.4 ps);Crate", 1024, 0., 1024., RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
   getObjectsManager()->startPublishing(mTimeBC.get());
 
-  mEventCounter = std::make_shared<TH2F>("EventCounter", "Event Counter;Event counter % 1000;Crate", 1000, 0., 1000., 72, 0, 72);
+  mEventCounter = std::make_shared<TH2F>("EventCounter", "Event Counter;Event counter % 1000;Crate", 1000, 0., 1000., RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
   getObjectsManager()->startPublishing(mEventCounter.get());
 
   mTOFRawsMulti = std::make_shared<TH1I>("TOFRawsMulti", "TOF raw hit multiplicity; TOF raw hits number; Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity);
@@ -110,16 +108,16 @@ void TaskDigits::initialize(o2::framework::InitContext& /*ctx*/)
   mTOFRawsToTOC = std::make_shared<TH1F>("TOFRawsToTOC", "TOF Raws - Hit ToT (ns) - O/C side;Measured Hit ToT (ns);Hits", 100, 0., 48.8);
   getObjectsManager()->startPublishing(mTOFRawsToTOC.get());
 
-  // mTOFRawsLTMHits = std::make_shared<TH1F>("TOFRawsLTMHits", "LTMs OR signals; Crate; Counts", 72, 0., 72.);
+  // mTOFRawsLTMHits = std::make_shared<TH1F>("TOFRawsLTMHits", "LTMs OR signals; Crate; Counts", RawDataDecoder::ncrates, 0., RawDataDecoder::ncrates);
   // getObjectsManager()->startPublishing(mTOFRawsLTMHits.get());
 
-  // mTOFrefMap = std::make_shared<TH2F>("TOFrefMap", "TOF enabled channel reference map;sector + FEA/4; strip", 72, 0., 18., 91, 0., 91.);
+  // mTOFrefMap = std::make_shared<TH2F>("TOFrefMap", "TOF enabled channel reference map;sector + FEA/4; strip", RawDataDecoder::ncrates, 0., 18., RawDataDecoder::nstrips, 0., RawDataDecoder::nstrips);
   // getObjectsManager()->startPublishing(mTOFrefMap.get());
 
-  mTOFRawHitMap = std::make_shared<TH2F>("TOFRawHitMap", "TOF raw hit map;sector + FEA/4; strip", 72, 0., 18., 91, 0., 91.);
+  mTOFRawHitMap = std::make_shared<TH2F>("TOFRawHitMap", "TOF raw hit map;sector + FEA/4; strip", RawDataDecoder::ncrates, 0., 18., RawDataDecoder::nstrips, 0., RawDataDecoder::nstrips);
   getObjectsManager()->startPublishing(mTOFRawHitMap.get());
 
-  // mTOFDecodingErrors = std::make_shared<TH2I>("TOFDecodingErrors", "Decoding error monitoring; DDL; Error ", 72, 0, 72, 13, 1, 14);
+  // mTOFDecodingErrors = std::make_shared<TH2I>("TOFDecodingErrors", "Decoding error monitoring; DDL; Error ", RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates, 13, 1, 14);
   // mTOFDecodingErrors->GetYaxis()->SetBinLabel(1, "DRM ");
   // mTOFDecodingErrors->GetYaxis()->SetBinLabel(2, "LTM ");
   // mTOFDecodingErrors->GetYaxis()->SetBinLabel(3, "TRM 3 ");
@@ -141,22 +139,22 @@ void TaskDigits::initialize(o2::framework::InitContext& /*ctx*/)
   // mTOFRawTimeVsTRM035 = std::make_shared<TH2F>("TOFRawTimeVsTRM035", "TOF raws - Hit time vs TRM - crates 0 to 35; TRM index = DDL*10+TRM(0-9);TOF raw time [ns]", 361, 0., 361., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   // getObjectsManager()->startPublishing(mTOFRawTimeVsTRM035.get());
 
-  // mTOFRawTimeVsTRM3671 = std::make_shared<TH2F>("TOFRawTimeVsTRM3671", "TOF raws - Hit time vs TRM - crates 36 to 72; TRM index = DDL**10+TRM(0-9);TOF raw time [ns]", 361, 360., 721., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
+  // mTOFRawTimeVsTRM3671 = std::make_shared<TH2F>("TOFRawTimeVsTRM3671", "TOF raws - Hit time vs TRM - crates 36 to RawDataDecoder::ncrates; TRM index = DDL**10+TRM(0-9);TOF raw time [ns]", 361, 360., 721., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   // getObjectsManager()->startPublishing(mTOFRawTimeVsTRM3671.get());
 
-  // mTOFTimeVsStrip = std::make_shared<TH2F>("TOFTimeVsStrip", "TOF raw hit time vs. MRPC (along z axis); MRPC index along z axis; Raws TOF time (ns) ", 91, 0., 91, fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
+  // mTOFTimeVsStrip = std::make_shared<TH2F>("TOFTimeVsStrip", "TOF raw hit time vs. MRPC (along z axis); MRPC index along z axis; Raws TOF time (ns) ", RawDataDecoder::nstrips, 0., RawDataDecoder::nstrips, fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   // getObjectsManager()->startPublishing(mTOFTimeVsStrip.get());
 
   mTOFtimeVsBCID = std::make_shared<TH2F>("TOFtimeVsBCID", "TOF time vs BCID;BC time (24.4 ps);time (ns) ", 1024, 0., 1024., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   getObjectsManager()->startPublishing(mTOFtimeVsBCID.get());
 
-  // mTOFchannelEfficiencyMap = std::make_shared<TH2F>("TOFchannelEfficiencyMap", "TOF channels (HWok && efficient && !noisy && !problematic);sector;strip", 72, 0., 18., 91, 0., 91.);
+  // mTOFchannelEfficiencyMap = std::make_shared<TH2F>("TOFchannelEfficiencyMap", "TOF channels (HWok && efficient && !noisy && !problematic);sector;strip", RawDataDecoder::ncrates, 0., 18., RawDataDecoder::nstrips, 0., RawDataDecoder::nstrips);
   // getObjectsManager()->startPublishing(mTOFchannelEfficiencyMap.get());
 
-  // mTOFhitsCTTM = std::make_shared<TH2F>("TOFhitsCTTM", "Map of hit pads according to CTTM numbering;LTM index;bit index", 72, 0., 72., 23, 0., 23.);
+  // mTOFhitsCTTM = std::make_shared<TH2F>("TOFhitsCTTM", "Map of hit pads according to CTTM numbering;LTM index;bit index", RawDataDecoder::ncrates, 0., RawDataDecoder::ncrates, 23, 0., 23.);
   // getObjectsManager()->startPublishing(mTOFhitsCTTM.get());
 
-  // mTOFmacropadCTTM = std::make_shared<TH2F>("TOFmacropadCTTM", "Map of hit macropads according to CTTM numbering;LTM index; bit index", 72, 0., 72., 23, 0., 23.);
+  // mTOFmacropadCTTM = std::make_shared<TH2F>("TOFmacropadCTTM", "Map of hit macropads according to CTTM numbering;LTM index; bit index", RawDataDecoder::ncrates, 0., RawDataDecoder::ncrates, 23, 0., 23.);
   // getObjectsManager()->startPublishing(mTOFmacropadCTTM.get());
 
   // mTOFmacropadDeltaPhiTime = std::make_shared<TH2F>("TOFmacropadDeltaPhiTime", "#Deltat vs #Delta#Phi of hit macropads;#Delta#Phi (degrees);#DeltaBX", 18, 0., 180., 20, 0., 20.0);
@@ -168,16 +166,16 @@ void TaskDigits::initialize(o2::framework::InitContext& /*ctx*/)
   // mTimeVsCttmBit = std::make_shared<TH2F>("TimeVsCttmBit", "TOF raw time vs trg channel; trg channel; raw time (ns)", 1728, 0., 1728., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   // getObjectsManager()->startPublishing(mTimeVsCttmBit.get());
 
-  // mTOFRawHitMap24 = std::make_shared<TH2F>("TOFRawHitMap24", "TOF average raw hits/channel map (1 bin = 1 FEA = 24 channels);sector;strip", 72, 0., 18., 91, 0., 91.);
+  // mTOFRawHitMap24 = std::make_shared<TH2F>("TOFRawHitMap24", "TOF average raw hits/channel map (1 bin = 1 FEA = 24 channels);sector;strip", RawDataDecoder::ncrates, 0., 18., RawDataDecoder::nstrips, 0., RawDataDecoder::nstrips);
   // getObjectsManager()->startPublishing(mTOFRawHitMap24.get());
 
-  // mHitMultiVsDDL = std::make_shared<TH2I>("itMultiVsDDL", "TOF raw hit multiplicity per event vs DDL ; DDL; TOF raw hits number; Events ", 72, 0., 72., 500, 0, 500);
+  // mHitMultiVsDDL = std::make_shared<TH2I>("itMultiVsDDL", "TOF raw hit multiplicity per event vs DDL ; DDL; TOF raw hits number; Events ", RawDataDecoder::ncrates, 0., RawDataDecoder::ncrates, 500, 0, 500);
   // getObjectsManager()->startPublishing(mHitMultiVsDDL.get());
 
   // mNfiredMacropad = std::make_shared<TH1I>("NfiredMacropad", "Number of fired TOF macropads per event; number of fired macropads; Events ", 50, 0, 50);
   // getObjectsManager()->startPublishing(mNfiredMacropad.get());
 
-  mOrbitDDL = std::make_shared<TProfile2D>("OrbitDDL", "Orbits in TF vs DDL ; DDL; Orbits in TF; Fraction", 72, 0., 72., 256 * 3, 0, 256);
+  mOrbitDDL = std::make_shared<TProfile2D>("OrbitDDL", "Orbits in TF vs DDL ; DDL; Orbits in TF; Fraction", RawDataDecoder::ncrates, 0., RawDataDecoder::ncrates, 256 * 3, 0, 256);
   getObjectsManager()->startPublishing(mOrbitDDL.get());
 
   mROWSize = std::make_shared<TH1I>("mROWSize", "N Orbits in TF; Orbits in TF", 300, 0., 300.);
@@ -214,8 +212,8 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
   const int phi_I1 = 48 * 4;
   const int phi_I2 = 48 * 14;
   // eta is counted every half strip starting from strip 0.
-  // Halves strips in side A 0-90, in side C 91-181
-  const int half_eta = 91;
+  // Halves strips in side A 0-90, in side C RawDataDecoder::nstrips-181
+  const int half_eta = RawDataDecoder::nstrips;
   Bool_t isSectorI = kFALSE;
   int ndigits[4] = { 0 }; // Number of digits per side I/A,O/A,I/C,O/C
 
@@ -224,7 +222,7 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
   int currentrow = 0;
   // Loop on readout windows
   for (const auto& row : rows) {
-    for (int i = 0; i < 72; i++) { // Loop on all crates
+    for (int i = 0; i < RawDataDecoder::ncrates; i++) { // Loop on all crates
       mOrbitDDL->Fill(i, currentrow / 3.0, !row.isEmptyCrate(i));
       //
       if (row.isEmptyCrate(i)) { // Only for active crates
@@ -293,7 +291,7 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
 
   //To complete the second TF in case it receives orbits
   for (; currentrow < 768; currentrow++) {
-    for (int i = 0; i < 72; i++) { // Loop on all crates
+    for (int i = 0; i < RawDataDecoder::ncrates; i++) { // Loop on all crates
       mOrbitDDL->Fill(i, currentrow / 3.0, 0);
     }
   }
@@ -302,7 +300,7 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
 void TaskDigits::endOfCycle()
 {
   ILOG(Info, Support) << "endOfCycle" << ENDM;
-  for (int i = 0; i < 91; i++) {
+  for (int i = 0; i < RawDataDecoder::nstrips; i++) {
     mHitCounterPerStrip[i].FillHistogram(mTOFRawHitMap.get(), i + 1);
   }
 }
@@ -316,9 +314,10 @@ void TaskDigits::reset()
 {
   // clean all the monitor objects here
   ILOG(Info, Support) << "Resetting the counters" << ENDM;
-  for (int i = 0; i < 91; i++) {
+  for (int i = 0; i < RawDataDecoder::nstrips; i++) {
     mHitCounterPerStrip[i].Reset();
   }
+  mHitCounterPerChannel.Reset();
 
   ILOG(Info, Support) << "Resetting the histogram" << ENDM;
   // Event info
