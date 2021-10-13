@@ -83,13 +83,12 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
             shifter_msg.push_back("Only events at 0 filled!");
           }
         } else {
+          const bool isZeroBinContentHigh = (mRawHitsZeroMultIntegral > (mMaxFractAtZeroMult * mRawHitsIntegral));
+          const bool isLowMultContentHigh = (mRawHitsLowMultIntegral > (mMaxFractAtLowMult * mRawHitsIntegral));
+          const bool isAverageLow = (mRawHitsMean < mMinRawHits);
+          const bool isAverageHigh = (mRawHitsMean > mMaxRawHits);
           switch (mRunningMode) {
             case kModeCollisions: // Collisions
-              const bool isZeroBinContentHigh = (mRawHitsZeroMultIntegral > (mMaxFractAtZeroMult * mRawHitsIntegral));
-              const bool isLowMultContentHigh = (mRawHitsLowMultIntegral > (mMaxFractAtLowMult * mRawHitsIntegral));
-              const bool isAverageLow = (mRawHitsMean < mMinRawHits);
-              const bool isAverageHigh = (mRawHitsMean > mMaxRawHits);
-
               if (isZeroBinContentHigh) {
                 result = Quality::Medium;
                 shifter_msg.push_back("Zero-multiplicity counts are high");
