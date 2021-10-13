@@ -40,7 +40,7 @@ class TaskDigits final : public TaskInterface
   /// \brief Constructor
   TaskDigits();
   /// Destructor
-  ~TaskDigits() override;
+  ~TaskDigits() override = default;
 
   // Definition of the methods for the template method pattern
   void initialize(o2::framework::InitContext& ctx) override;

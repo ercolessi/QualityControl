@@ -53,53 +53,6 @@ TaskDigits::TaskDigits() : TaskInterface()
 {
 }
 
-TaskDigits::~TaskDigits()
-{
-
-  // Event info
-  mOrbitID.reset();
-  mTimeBC.reset();
-  mEventCounter.reset();
-  mTOFRawHitMap.reset();
-  mTOFtimeVsBCID.reset();
-  mOrbitDDL.reset();
-  mROWSize.reset();
-  // Multiplicity
-  mTOFRawsMulti.reset();
-  mTOFRawsMultiIA.reset();
-  mTOFRawsMultiOA.reset();
-  mTOFRawsMultiIC.reset();
-  mTOFRawsMultiOC.reset();
-  // Time
-  mTOFRawsTime.reset();
-  mTOFRawsTimeIA.reset();
-  mTOFRawsTimeOA.reset();
-  mTOFRawsTimeIC.reset();
-  mTOFRawsTimeOC.reset();
-  // ToT
-  mTOFRawsToT.reset();
-  mTOFRawsToTIA.reset();
-  mTOFRawsToTOA.reset();
-  mTOFRawsToTIC.reset();
-  mTOFRawsToTOC.reset();
-  // mTOFRawsLTMHits.reset();
-  // mTOFrefMap.reset();
-  // mTOFDecodingErrors.reset();
-  // mTOFOrphansTime.reset();
-  // mTOFRawTimeVsTRM035.reset();
-  // mTOFRawTimeVsTRM3671.reset();
-  // mTOFTimeVsStrip.reset();
-  // mTOFchannelEfficiencyMap.reset();
-  // mTOFhitsCTTM.reset();
-  // mTOFmacropadCTTM.reset();
-  // mTOFmacropadDeltaPhiTime.reset();
-  // mBXVsCttmBit.reset();
-  // mTimeVsCttmBit.reset();
-  // mTOFRawHitMap24.reset();
-  // mHitMultiVsDDL.reset();
-  // mNfiredMacropad.reset();
-}
-
 void TaskDigits::initialize(o2::framework::InitContext& /*ctx*/)
 {
   ILOG(Info, Support) << "initialize TaskDigits" << ENDM;
@@ -362,6 +315,10 @@ void TaskDigits::endOfActivity(Activity& /*activity*/)
 void TaskDigits::reset()
 {
   // clean all the monitor objects here
+  ILOG(Info, Support) << "Resetting the counters" << ENDM;
+  for (int i = 0; i < 91; i++) {
+    mHitCounterPerStrip[i].Reset();
+  }
 
   ILOG(Info, Support) << "Resetting the histogram" << ENDM;
   // Event info
