@@ -162,7 +162,7 @@ void CheckRawMultiplicity::beautify(std::shared_ptr<MonitorObject> mo, Quality c
       msg->SetTextColor(kBlack);
     } else if (checkResult == Quality::Medium) {
       ILOG(Info, Support) << "Quality::medium, setting to yellow";
-      msg->AddText("IF TOF IN RUN check the TOF TWiki");
+      msg->AddText("IF TOF IN RUN email TOF on-call.");
       msg->SetFillColor(kYellow);
       msg->SetTextColor(kBlack);
     }

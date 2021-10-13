@@ -85,7 +85,7 @@ void CheckDiagnostics::beautify(std::shared_ptr<MonitorObject> mo, Quality check
       //
       msg->Clear();
       msg->AddText("No entries. IF TOF IN RUN");
-      msg->AddText("check the TOF TWiki");
+      msg->AddText("email TOF on-call.");
       msg->SetFillColor(kYellow);
       //
       h->SetFillColor(kOrange);

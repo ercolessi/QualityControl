@@ -123,7 +123,7 @@ void CheckRawTime::beautify(std::shared_ptr<MonitorObject> mo, Quality checkResu
       //
       msg->Clear();
       msg->AddText("No entries. If TOF in the run");
-      msg->AddText("check TOF TWiki");
+      msg->AddText("email TOF on-call.");
       msg->SetFillColor(kYellow);
       msg->SetTextColor(kBlack);
       // text->Clear();
