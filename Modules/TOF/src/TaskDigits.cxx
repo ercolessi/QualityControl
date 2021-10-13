@@ -236,7 +236,7 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
     //
     mTOFRawsMulti->Fill(row.size()); // Number of digits inside a readout window
 
-    const auto digits_in_row = row.getBunchChannelData(digits); // Digits inside a readout window
+    const auto& digits_in_row = row.getBunchChannelData(digits); // Digits inside a readout window
     // Loop on digits
     for (auto const& digit : digits_in_row) {
       if (digit.getChannel() < 0) {
