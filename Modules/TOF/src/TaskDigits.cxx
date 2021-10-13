@@ -196,9 +196,9 @@ void TaskDigits::startOfCycle()
 void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
 {
   // Get TOF digits
-  const auto digits = ctx.inputs().get<gsl::span<o2::tof::Digit>>("tofdigits");
+  const auto& digits = ctx.inputs().get<gsl::span<o2::tof::Digit>>("tofdigits");
   // Get TOF Readout window
-  const auto rows = ctx.inputs().get<std::vector<o2::tof::ReadoutWindowData>>("readoutwin");
+  const auto& rows = ctx.inputs().get<std::vector<o2::tof::ReadoutWindowData>>("readoutwin");
 
   int eta, phi;       // Eta and phi indices
   int det[5] = { 0 }; // Coordinates
@@ -209,11 +209,11 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
   // SM in side O: 5-13 -> 9
   // phi is counted every pad starting from SM 0.
   // There are 48 pads per SM. Side I is from phi 0:48*4 and 48*14:48*18
-  const int phi_I1 = 48 * 4;
-  const int phi_I2 = 48 * 14;
+  constexpr int phi_I1 = 48 * 4;
+  constexpr int phi_I2 = 48 * 14;
   // eta is counted every half strip starting from strip 0.
   // Halves strips in side A 0-90, in side C RawDataDecoder::nstrips-181
-  const int half_eta = RawDataDecoder::nstrips;
+  constexpr int half_eta = RawDataDecoder::nstrips;
   Bool_t isSectorI = kFALSE;
   int ndigits[4] = { 0 }; // Number of digits per side I/A,O/A,I/C,O/C
 
