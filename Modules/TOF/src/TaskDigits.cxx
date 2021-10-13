@@ -56,13 +56,13 @@ void TaskDigits::initialize(o2::framework::InitContext& /*ctx*/)
     fgNbinsTime = ::atoi(param->second.c_str());
   }
   if (auto param = mCustomParameters.find("kNbinsWidthTime"); param != mCustomParameters.end()) {
-    fgkNbinsWidthTime = ::atoi(param->second.c_str());
+    fgkNbinsWidthTime = ::atof(param->second.c_str());
   }
   if (auto param = mCustomParameters.find("RangeMinTime"); param != mCustomParameters.end()) {
-    fgRangeMinTime = ::atoi(param->second.c_str());
+    fgRangeMinTime = ::atof(param->second.c_str());
   }
   if (auto param = mCustomParameters.find("RangeMaxTime"); param != mCustomParameters.end()) {
-    fgRangeMaxTime = ::atoi(param->second.c_str());
+    fgRangeMaxTime = ::atof(param->second.c_str());
   }
 
   // Define histograms
