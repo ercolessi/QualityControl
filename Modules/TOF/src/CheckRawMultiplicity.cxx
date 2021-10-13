@@ -41,14 +41,11 @@ void CheckRawMultiplicity::configure(std::string)
   if (auto param = mCustomParameters.find("MaxRawHits"); param != mCustomParameters.end()) {
     mMaxRawHits = ::atof(param->second.c_str());
   }
-  if (auto param = mCustomParameters.find("FractAtZeroMult"); param != mCustomParameters.end()) {
-    mFractAtZeroMult = ::atof(param->second.c_str());
+  if (auto param = mCustomParameters.find("MaxFractAtZeroMult"); param != mCustomParameters.end()) {
+    mMaxFractAtZeroMult = ::atof(param->second.c_str());
   }
-  if (auto param = mCustomParameters.find("FractAtLowMult"); param != mCustomParameters.end()) {
-    mFractAtLowMult = ::atof(param->second.c_str());
-  }
-  if (auto param = mCustomParameters.find("MaxTOFRawHitsPbPb"); param != mCustomParameters.end()) {
-    mMaxTOFRawHitsPbPb = ::atof(param->second.c_str());
+  if (auto param = mCustomParameters.find("MaxFractAtLowMult"); param != mCustomParameters.end()) {
+    mMaxFractAtLowMult = ::atof(param->second.c_str());
   }
 }
 
@@ -98,8 +95,8 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
           }
           if (0) { // TODO: this is only for cosmics, how to check? Re: from the configuration of the checker!
           } else { // Running with collisions
-            const bool isZeroBinContentHigh = (mRawHitsZeroMultIntegral > (mFractAtZeroMult * mRawHitsIntegral));
-            const bool isLowMultContentHigh = (mRawHitsLowMultIntegral > (mFractAtLowMult * mRawHitsIntegral));
+            const bool isZeroBinContentHigh = (mRawHitsZeroMultIntegral > (mMaxFractAtZeroMult * mRawHitsIntegral));
+            const bool isLowMultContentHigh = (mRawHitsLowMultIntegral > (mMaxFractAtLowMult * mRawHitsIntegral));
             const bool isINT7AverageLow = (mRawHitsMean < mMinRawHits);
             const bool isINT7AverageHigh = (mRawHitsMean > mMaxRawHits);
 
@@ -129,7 +126,7 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
               if (isLowMultContentHigh) {
                 result = Quality::Medium;
                 shifter_msg.push_back("Low-multiplicity counts are high");
-                shifter_msg.push_back(Form("(%.2f higher than total)!", mFractAtLowMult));
+                shifter_msg.push_back(Form("(%.2f higher than total)!", mMaxFractAtLowMult));
               } else if (mRawHitsMean > mMaxTOFRawHitsPbPb) {
                 //assume that good range of multi in PbPb goes from 20 to 500 tracks
                 result = Quality::Medium;
