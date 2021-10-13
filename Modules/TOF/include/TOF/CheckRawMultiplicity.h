@@ -41,7 +41,13 @@ class CheckRawMultiplicity : public o2::quality_control::checker::CheckInterface
   void beautify(std::shared_ptr<MonitorObject> mo, Quality checkResult) override;
   std::string getAcceptedType() override;
 
+  /// Running modes available
+  static constexpr int mRunningModeCollisions = 0; /// Standard running mode with collisions
+  static constexpr int mRunningModeCosmics = 1;    /// Running mode with collisions
+
  private:
+  /// Running mode
+  int mRunningMode = mRunningModeCollisions;
   /// Minimum value of TOF raw hit multiplicity
   float mMinRawHits = 10;
   /// Maximum value of TOF raw hit multiplicity
