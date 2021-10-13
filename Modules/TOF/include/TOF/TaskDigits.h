@@ -52,13 +52,13 @@ class TaskDigits final : public TaskInterface
   void endOfActivity(Activity& activity) override;
   void reset() override;
 
-  static const int fgNbinsMultiplicity;    /// Number of bins in multiplicity plot
-  static const int fgRangeMinMultiplicity; /// Min range in multiplicity plot
-  static const int fgRangeMaxMultiplicity; /// Max range in multiplicity plot
-  static const int fgNbinsTime;            /// Number of bins in time plot
-  static const float fgkNbinsWidthTime;    /// Width of bins in time plot
-  static const float fgRangeMinTime;       /// Range min in time plot
-  static const float fgRangeMaxTime;       /// Range max in time plot
+  int fgNbinsMultiplicity = 2000;                   /// Number of bins in multiplicity plot
+  static constexpr int fgRangeMinMultiplicity = 0;  /// Min range in multiplicity plot
+  int fgRangeMaxMultiplicity = fgNbinsMultiplicity; /// Max range in multiplicity plot
+  int fgNbinsTime = 250;                            /// Number of bins in time plot
+  float fgkNbinsWidthTime = 2.44;                   /// Width of bins in time plot
+  float fgRangeMinTime = 0.0;                       /// Range min in time plot
+  float fgRangeMaxTime = 620.0;                     /// Range max in time plot
 
  private:
   // Event info

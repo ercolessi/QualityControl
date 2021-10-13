@@ -39,20 +39,33 @@
 namespace o2::quality_control_modules::tof
 {
 
-const int TaskDigits::fgNbinsMultiplicity = 2000;                   /// Number of bins in multiplicity plot
-const int TaskDigits::fgRangeMinMultiplicity = 0;                   /// Min range in multiplicity plot
-const int TaskDigits::fgRangeMaxMultiplicity = fgNbinsMultiplicity; /// Max range in multiplicity plot
-const int TaskDigits::fgNbinsTime = 250;                            /// Number of bins in time plot
-const float TaskDigits::fgkNbinsWidthTime = 2.44;                   /// Width of bins in time plot
-const float TaskDigits::fgRangeMinTime = 0.0;                       /// Range min in time plot
-const float TaskDigits::fgRangeMaxTime = 620.0;                     /// Range max in time plot
-
 TaskDigits::TaskDigits() : TaskInterface()
 {
 }
 
 void TaskDigits::initialize(o2::framework::InitContext& /*ctx*/)
 {
+  // Define parameters
+  if (auto param = mCustomParameters.find("NbinsMultiplicity"); param != mCustomParameters.end()) {
+    fgNbinsMultiplicity = ::atoi(param->second.c_str());
+  }
+  if (auto param = mCustomParameters.find("RangeMaxMultiplicity"); param != mCustomParameters.end()) {
+    fgRangeMaxMultiplicity = ::atoi(param->second.c_str());
+  }
+  if (auto param = mCustomParameters.find("NbinsTime"); param != mCustomParameters.end()) {
+    fgNbinsTime = ::atoi(param->second.c_str());
+  }
+  if (auto param = mCustomParameters.find("kNbinsWidthTime"); param != mCustomParameters.end()) {
+    fgkNbinsWidthTime = ::atoi(param->second.c_str());
+  }
+  if (auto param = mCustomParameters.find("RangeMinTime"); param != mCustomParameters.end()) {
+    fgRangeMinTime = ::atoi(param->second.c_str());
+  }
+  if (auto param = mCustomParameters.find("RangeMaxTime"); param != mCustomParameters.end()) {
+    fgRangeMaxTime = ::atoi(param->second.c_str());
+  }
+
+  // Define histograms
   ILOG(Info, Support) << "initialize TaskDigits" << ENDM;
   mOrbitID = std::make_shared<TH2F>("OrbitID", "OrbitID;OrbitID % 1048576;Crate", 1024, 0, 1048576, RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
   getObjectsManager()->startPublishing(mOrbitID.get());
