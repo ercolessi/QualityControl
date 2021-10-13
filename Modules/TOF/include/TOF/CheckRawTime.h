@@ -45,6 +45,8 @@ class CheckRawTime : public o2::quality_control::checker::CheckInterface
   float mMinRawTime = 175.f;
   /// Maximum value for TOF average raw time
   float mMaxRawTime = 250.f;
+  /// Minimum value for the ratio between value the integral in the peak and the one outside for TOF raw time
+  float mMinPeakRatioIntegral = 0.20;
 
   // User variables
   /// Mean of the TOF raw time distribution

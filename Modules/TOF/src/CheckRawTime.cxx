@@ -37,6 +37,9 @@ void CheckRawTime::configure(std::string)
   if (auto param = mCustomParameters.find("MaxRawTime"); param != mCustomParameters.end()) {
     mMaxRawTime = ::atof(param->second.c_str());
   }
+  if (auto param = mCustomParameters.find("MinPeakRatioIntegral"); param != mCustomParameters.end()) {
+    mMinPeakRatioIntegral = ::atof(param->second.c_str());
+  }
 }
 
 Quality CheckRawTime::check(std::map<std::string, std::shared_ptr<MonitorObject>>* moMap)
@@ -57,7 +60,7 @@ Quality CheckRawTime::check(std::map<std::string, std::shared_ptr<MonitorObject>
       if ((mRawTimeMean > mMinRawTime) && (mRawTimeMean < mMaxRawTime)) {
         result = Quality::Good;
       } else {
-        if (mRawTimePeakIntegral / mRawTimeIntegral > 0.20) {
+        if (mRawTimePeakIntegral / mRawTimeIntegral > mMinPeakRatioIntegral) {
           ILOG(Warning, Support) << Form("Raw time: peak/total integral = %5.2f, mean = %5.2f ns -> Check filling scheme...", mRawTimePeakIntegral / mRawTimeIntegral, mRawTimeMean);
           result = Quality::Medium;
         } else {
