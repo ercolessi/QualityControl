@@ -218,6 +218,22 @@ void RawDataDecoder::initHistograms() // Initialization of histograms in Decoder
 
 void RawDataDecoder::resetHistograms() // Reset of histograms in Decoder
 {
+  // Reset counters
+  mCounterIndexEO.Reset();
+  mCounterIndexEOInTimeWin.Reset();
+  mCounterNoisyChannels.Reset();
+  mCounterTimeBC.Reset();
+  for (unsigned int i = 0; i < ncrates; i++) {
+    mCounterOrbitsPerCrate[i].Reset();
+    for (unsigned int j = 0; j < 4; j++) {
+      mCounterNoiseMap[i][j].Reset();
+    }
+  }
+  mCounterRDHTriggers[0].Reset();
+  mCounterRDHTriggers[1].Reset();
+  mCounterRDHOpen.Reset();
+
+  // Reset histograms
   mHistoHits->Reset();
   mHistoTime->Reset();
   mHistoTOT->Reset();
@@ -356,8 +372,8 @@ void TaskRaw::initialize(o2::framework::InitContext& /*ctx*/)
   // TRMs
   for (unsigned int j = 0; j < RawDataDecoder::ntrms; j++) {
     mHistoTRM[j] = std::make_shared<TH2F>(Form("TRMCounterSlot%02i", j + 3), Form("TRM Slot %i Diagnostics;TRM Word;Crate;Words", j + 3),
-                                RawDataDecoder::nwords, 0, RawDataDecoder::nwords,
-                                RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
+                                          RawDataDecoder::nwords, 0, RawDataDecoder::nwords,
+                                          RawDataDecoder::ncrates, 0, RawDataDecoder::ncrates);
     mDecoderRaw.mCounterTRM[0][j].MakeHistogram(mHistoTRM[j].get());
     getObjectsManager()->startPublishing(mHistoTRM[j].get());
   }
@@ -377,9 +393,9 @@ void TaskRaw::initialize(o2::framework::InitContext& /*ctx*/)
   }
   // Slot participating in all crates
   mHistoSlotParticipating = std::make_shared<TH2F>("hSlotPartMask",
-                                         "Slot participating;Crate;Slot",
-                                         RawDataDecoder::ncrates, 0., RawDataDecoder::ncrates,
-                                         RawDataDecoder::nslots + 1, 0, RawDataDecoder::nslots + 1);
+                                                   "Slot participating;Crate;Slot",
+                                                   RawDataDecoder::ncrates, 0., RawDataDecoder::ncrates,
+                                                   RawDataDecoder::nslots + 1, 0, RawDataDecoder::nslots + 1);
   mHistoSlotParticipating.get()->GetYaxis()->SetBinLabel(1, "RDH");
   mHistoSlotParticipating.get()->GetYaxis()->SetBinLabel(2, "DRM");
   mHistoSlotParticipating.get()->GetYaxis()->SetBinLabel(3, "LTM");
@@ -437,9 +453,7 @@ void TaskRaw::startOfCycle()
 void TaskRaw::monitorData(o2::framework::ProcessingContext& ctx)
 {
   // Reset counter before decode() call
-  for (int ncrate = 0; ncrate < 72; ncrate++) { // loop over crates
-    mDecoderRaw.mCounterRDHOpen.Reset();
-  }
+  mDecoderRaw.mCounterRDHOpen.Reset();
   //
   for (auto iit = ctx.inputs().begin(), iend = ctx.inputs().end(); iit != iend; ++iit) {
     if (!iit.isValid()) {
@@ -458,7 +472,7 @@ void TaskRaw::monitorData(o2::framework::ProcessingContext& ctx)
     }
   }
   // Count number of orbits per crate
-  for (int ncrate = 0; ncrate < 72; ncrate++) { // loop over crates
+  for (unsigned int ncrate = 0; ncrate < RawDataDecoder::ncrates; ncrate++) { // loop over crates
     if (mDecoderRaw.mCounterRDHOpen.HowMany(ncrate) <= 799) {
       mDecoderRaw.mCounterOrbitsPerCrate[ncrate].Count(mDecoderRaw.mCounterRDHOpen.HowMany(ncrate));
     } else {
