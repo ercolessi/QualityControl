@@ -44,6 +44,12 @@ void CheckRawMultiplicity::configure(std::string)
   if (auto param = mCustomParameters.find("FractAtZeroMult"); param != mCustomParameters.end()) {
     mFractAtZeroMult = ::atof(param->second.c_str());
   }
+  if (auto param = mCustomParameters.find("FractAtLowMult"); param != mCustomParameters.end()) {
+    mFractAtLowMult = ::atof(param->second.c_str());
+  }
+  if (auto param = mCustomParameters.find("MaxTOFRawHitsPbPb"); param != mCustomParameters.end()) {
+    mMaxTOFRawHitsPbPb = ::atof(param->second.c_str());
+  }
 }
 
 Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<MonitorObject>>* moMap)
@@ -59,6 +65,8 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
         result = Quality::Medium;
         shifter_msg.push_back("No counts!");
       } else { // Histogram is non empty
+
+        // Computing variables to check
         mRawHitsMean = h->GetMean();
         mRawHitsZeroMultIntegral = h->Integral(1, 1);
         mRawHitsLowMultIntegral = h->Integral(1, 10);
@@ -71,10 +79,10 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
           }
         } else {
           switch (mRunningMode) {
-            case mRunningModeCollisions: // Collisions
+            case kModeCollisions: // Collisions
               /* code */
               break;
-            case mRunningModeCosmics: // Collisions
+            case kModeCosmics: // Collisions
               if (mRawHitsMean < 10.) {
                 result = Quality::Good;
                 shifter_msg.push_back("Average within limits, OK!");

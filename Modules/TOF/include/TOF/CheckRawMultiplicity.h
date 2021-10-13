@@ -42,12 +42,13 @@ class CheckRawMultiplicity : public o2::quality_control::checker::CheckInterface
   std::string getAcceptedType() override;
 
   /// Running modes available
-  static constexpr int mRunningModeCollisions = 0; /// Standard running mode with collisions
-  static constexpr int mRunningModeCosmics = 1;    /// Running mode with collisions
+  static constexpr int kModeCollisions = 0; /// Standard running mode with collisions
+  static constexpr int kModeCosmics = 1;    /// Running mode with collisions
 
  private:
-  /// Running mode
-  int mRunningMode = mRunningModeCollisions;
+  // Running configurable parameters
+  /// Running mode, cosmics or collisions
+  int mRunningMode = kModeCollisions;
   /// Minimum value of TOF raw hit multiplicity
   float mMinRawHits = 10;
   /// Maximum value of TOF raw hit multiplicity
@@ -58,6 +59,8 @@ class CheckRawMultiplicity : public o2::quality_control::checker::CheckInterface
   float mFractAtLowMult = 0.75;
   /// Maximum average TOF raw hit multiplicity in Pb-Pb
   const float mMaxTOFRawHitsPbPb = 500;
+
+  // User variables
   /// Mean of the TOF hit multiplicity histogram
   float mRawHitsMean = 0.f;
   /// Number of events with 0 TOF hits
