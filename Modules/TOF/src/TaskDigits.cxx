@@ -55,6 +55,7 @@ TaskDigits::TaskDigits() : TaskInterface()
 
 TaskDigits::~TaskDigits()
 {
+
   // Event info
   mOrbitID.reset();
   mTimeBC.reset();
@@ -105,67 +106,67 @@ void TaskDigits::initialize(o2::framework::InitContext& /*ctx*/)
   mOrbitID = std::make_shared<TH2F>("OrbitID", "OrbitID;OrbitID % 1048576;Crate", 1024, 0, 1048576, 72, 0, 72);
   getObjectsManager()->startPublishing(mOrbitID.get());
 
-  mTimeBC = std::make_shared<TH2F>("TimeBC", "Raw BC Time;BC time (24.4 ps);Crate", 1024, 0., 1024., 72, 0, 72));
+  mTimeBC = std::make_shared<TH2F>("TimeBC", "Raw BC Time;BC time (24.4 ps);Crate", 1024, 0., 1024., 72, 0, 72);
   getObjectsManager()->startPublishing(mTimeBC.get());
 
-  mEventCounter = std::make_shared<TH2F>("EventCounter", "Event Counter;Event counter % 1000;Crate", 1000, 0., 1000., 72, 0, 72));
+  mEventCounter = std::make_shared<TH2F>("EventCounter", "Event Counter;Event counter % 1000;Crate", 1000, 0., 1000., 72, 0, 72);
   getObjectsManager()->startPublishing(mEventCounter.get());
 
-  mTOFRawsMulti = std::make_shared<TH1I>("TOFRawsMulti", "TOF raw hit multiplicity; TOF raw hits number; Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity));
+  mTOFRawsMulti = std::make_shared<TH1I>("TOFRawsMulti", "TOF raw hit multiplicity; TOF raw hits number; Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity);
   getObjectsManager()->startPublishing(mTOFRawsMulti.get());
 
-  mTOFRawsMultiIA = std::make_shared<TH1I>("TOFRawsMultiIA", "TOF raw hit multiplicity - I/A side; TOF raw hits number;Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity));
+  mTOFRawsMultiIA = std::make_shared<TH1I>("TOFRawsMultiIA", "TOF raw hit multiplicity - I/A side; TOF raw hits number;Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity);
   getObjectsManager()->startPublishing(mTOFRawsMultiIA.get());
 
-  mTOFRawsMultiOA = std::make_shared<TH1I>("TOFRawsMultiOA", "TOF raw hit multiplicity - O/A side; TOF raw hits number;Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity));
+  mTOFRawsMultiOA = std::make_shared<TH1I>("TOFRawsMultiOA", "TOF raw hit multiplicity - O/A side; TOF raw hits number;Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity);
   getObjectsManager()->startPublishing(mTOFRawsMultiOA.get());
 
-  mTOFRawsMultiIC = std::make_shared<TH1I>("TOFRawsMultiIC", "TOF raw hit multiplicity - I/C side; TOF raw hits number;Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity));
+  mTOFRawsMultiIC = std::make_shared<TH1I>("TOFRawsMultiIC", "TOF raw hit multiplicity - I/C side; TOF raw hits number;Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity);
   getObjectsManager()->startPublishing(mTOFRawsMultiIC.get());
 
-  mTOFRawsMultiOC = std::make_shared<TH1I>("TOFRawsMultiOC", "TOF raw hit multiplicity - O/C side; TOF raw hits number;Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity));
+  mTOFRawsMultiOC = std::make_shared<TH1I>("TOFRawsMultiOC", "TOF raw hit multiplicity - O/C side; TOF raw hits number;Events ", fgNbinsMultiplicity, fgRangeMinMultiplicity, fgRangeMaxMultiplicity);
   getObjectsManager()->startPublishing(mTOFRawsMultiOC.get());
 
-  mTOFRawsTime = std::make_shared<TH1F>("TOFRawsTime", "TOF Raws - Hit time (ns);Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  mTOFRawsTime = std::make_shared<TH1F>("TOFRawsTime", "TOF Raws - Hit time (ns);Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   getObjectsManager()->startPublishing(mTOFRawsTime.get());
 
-  mTOFRawsTimeIA = std::make_shared<TH1F>("TOFRawsTimeIA", "TOF Raws - Hit time (ns) - I/A side;Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  mTOFRawsTimeIA = std::make_shared<TH1F>("TOFRawsTimeIA", "TOF Raws - Hit time (ns) - I/A side;Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   getObjectsManager()->startPublishing(mTOFRawsTimeIA.get());
 
-  mTOFRawsTimeOA = std::make_shared<TH1F>("TOFRawsTimeOA", "TOF Raws - Hit time (ns) - O/A side;Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  mTOFRawsTimeOA = std::make_shared<TH1F>("TOFRawsTimeOA", "TOF Raws - Hit time (ns) - O/A side;Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   getObjectsManager()->startPublishing(mTOFRawsTimeOA.get());
 
-  mTOFRawsTimeIC = std::make_shared<TH1F>("TOFRawsTimeIC", "TOF Raws - Hit time (ns) - I/C side;Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  mTOFRawsTimeIC = std::make_shared<TH1F>("TOFRawsTimeIC", "TOF Raws - Hit time (ns) - I/C side;Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   getObjectsManager()->startPublishing(mTOFRawsTimeIC.get());
 
-  mTOFRawsTimeOC = std::make_shared<TH1F>("TOFRawsTimeOC", "TOF Raws - Hit time (ns) - O/C side;Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  mTOFRawsTimeOC = std::make_shared<TH1F>("TOFRawsTimeOC", "TOF Raws - Hit time (ns) - O/C side;Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   getObjectsManager()->startPublishing(mTOFRawsTimeOC.get());
 
-  mTOFRawsToT = std::make_shared<TH1F>("TOFRawsToT", "TOF Raws - Hit ToT (ns);Measured Hit ToT (ns);Hits", 100, 0., 48.8));
+  mTOFRawsToT = std::make_shared<TH1F>("TOFRawsToT", "TOF Raws - Hit ToT (ns);Measured Hit ToT (ns);Hits", 100, 0., 48.8);
   getObjectsManager()->startPublishing(mTOFRawsToT.get());
 
-  mTOFRawsToTIA = std::make_shared<TH1F>("TOFRawsToTIA", "TOF Raws - Hit ToT (ns) - I/A side;Measured Hit ToT (ns);Hits", 100, 0., 48.8));
+  mTOFRawsToTIA = std::make_shared<TH1F>("TOFRawsToTIA", "TOF Raws - Hit ToT (ns) - I/A side;Measured Hit ToT (ns);Hits", 100, 0., 48.8);
   getObjectsManager()->startPublishing(mTOFRawsToTIA.get());
 
-  mTOFRawsToTOA = std::make_shared<TH1F>("TOFRawsToTOA", "TOF Raws - Hit ToT (ns) - O/A side;Measured Hit ToT (ns);Hits", 100, 0., 48.8));
+  mTOFRawsToTOA = std::make_shared<TH1F>("TOFRawsToTOA", "TOF Raws - Hit ToT (ns) - O/A side;Measured Hit ToT (ns);Hits", 100, 0., 48.8);
   getObjectsManager()->startPublishing(mTOFRawsToTOA.get());
 
-  mTOFRawsToTIC = std::make_shared<TH1F>("TOFRawsToTIC", "TOF Raws - Hit ToT (ns) - I/C side;Measured Hit ToT (ns);Hits", 100, 0., 48.8));
+  mTOFRawsToTIC = std::make_shared<TH1F>("TOFRawsToTIC", "TOF Raws - Hit ToT (ns) - I/C side;Measured Hit ToT (ns);Hits", 100, 0., 48.8);
   getObjectsManager()->startPublishing(mTOFRawsToTIC.get());
 
-  mTOFRawsToTOC = std::make_shared<TH1F>("TOFRawsToTOC", "TOF Raws - Hit ToT (ns) - O/C side;Measured Hit ToT (ns);Hits", 100, 0., 48.8));
+  mTOFRawsToTOC = std::make_shared<TH1F>("TOFRawsToTOC", "TOF Raws - Hit ToT (ns) - O/C side;Measured Hit ToT (ns);Hits", 100, 0., 48.8);
   getObjectsManager()->startPublishing(mTOFRawsToTOC.get());
 
-  // mTOFRawsLTMHits = std::make_shared<TH1F>("TOFRawsLTMHits", "LTMs OR signals; Crate; Counts", 72, 0., 72.));
+  // mTOFRawsLTMHits = std::make_shared<TH1F>("TOFRawsLTMHits", "LTMs OR signals; Crate; Counts", 72, 0., 72.);
   // getObjectsManager()->startPublishing(mTOFRawsLTMHits.get());
 
-  // mTOFrefMap = std::make_shared<TH2F>("TOFrefMap", "TOF enabled channel reference map;sector + FEA/4; strip", 72, 0., 18., 91, 0., 91.));
+  // mTOFrefMap = std::make_shared<TH2F>("TOFrefMap", "TOF enabled channel reference map;sector + FEA/4; strip", 72, 0., 18., 91, 0., 91.);
   // getObjectsManager()->startPublishing(mTOFrefMap.get());
 
-  mTOFRawHitMap = std::make_shared<TH2F>("TOFRawHitMap", "TOF raw hit map;sector + FEA/4; strip", 72, 0., 18., 91, 0., 91.));
+  mTOFRawHitMap = std::make_shared<TH2F>("TOFRawHitMap", "TOF raw hit map;sector + FEA/4; strip", 72, 0., 18., 91, 0., 91.);
   getObjectsManager()->startPublishing(mTOFRawHitMap.get());
 
-  // mTOFDecodingErrors = std::make_shared<TH2I>("TOFDecodingErrors", "Decoding error monitoring; DDL; Error ", 72, 0, 72, 13, 1, 14));
+  // mTOFDecodingErrors = std::make_shared<TH2I>("TOFDecodingErrors", "Decoding error monitoring; DDL; Error ", 72, 0, 72, 13, 1, 14);
   // mTOFDecodingErrors->GetYaxis()->SetBinLabel(1, "DRM ");
   // mTOFDecodingErrors->GetYaxis()->SetBinLabel(2, "LTM ");
   // mTOFDecodingErrors->GetYaxis()->SetBinLabel(3, "TRM 3 ");
@@ -181,52 +182,52 @@ void TaskDigits::initialize(o2::framework::InitContext& /*ctx*/)
   // mTOFDecodingErrors->GetYaxis()->SetBinLabel(13, "recovered");
   // getObjectsManager()->startPublishing(mTOFDecodingErrors.get());
 
-  // mTOFOrphansTime = std::make_shared<TH1F>("TOFOrphansTime", "TOF Raws - Orphans time (ns);Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  // mTOFOrphansTime = std::make_shared<TH1F>("TOFOrphansTime", "TOF Raws - Orphans time (ns);Measured Hit time [ns];Hits", fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   // getObjectsManager()->startPublishing(mTOFOrphansTime.get());
 
-  // mTOFRawTimeVsTRM035 = std::make_shared<TH2F>("TOFRawTimeVsTRM035", "TOF raws - Hit time vs TRM - crates 0 to 35; TRM index = DDL*10+TRM(0-9);TOF raw time [ns]", 361, 0., 361., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  // mTOFRawTimeVsTRM035 = std::make_shared<TH2F>("TOFRawTimeVsTRM035", "TOF raws - Hit time vs TRM - crates 0 to 35; TRM index = DDL*10+TRM(0-9);TOF raw time [ns]", 361, 0., 361., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   // getObjectsManager()->startPublishing(mTOFRawTimeVsTRM035.get());
 
-  // mTOFRawTimeVsTRM3671 = std::make_shared<TH2F>("TOFRawTimeVsTRM3671", "TOF raws - Hit time vs TRM - crates 36 to 72; TRM index = DDL**10+TRM(0-9);TOF raw time [ns]", 361, 360., 721., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  // mTOFRawTimeVsTRM3671 = std::make_shared<TH2F>("TOFRawTimeVsTRM3671", "TOF raws - Hit time vs TRM - crates 36 to 72; TRM index = DDL**10+TRM(0-9);TOF raw time [ns]", 361, 360., 721., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   // getObjectsManager()->startPublishing(mTOFRawTimeVsTRM3671.get());
 
-  // mTOFTimeVsStrip = std::make_shared<TH2F>("TOFTimeVsStrip", "TOF raw hit time vs. MRPC (along z axis); MRPC index along z axis; Raws TOF time (ns) ", 91, 0., 91, fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  // mTOFTimeVsStrip = std::make_shared<TH2F>("TOFTimeVsStrip", "TOF raw hit time vs. MRPC (along z axis); MRPC index along z axis; Raws TOF time (ns) ", 91, 0., 91, fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   // getObjectsManager()->startPublishing(mTOFTimeVsStrip.get());
 
-  mTOFtimeVsBCID = std::make_shared<TH2F>("TOFtimeVsBCID", "TOF time vs BCID;BC time (24.4 ps);time (ns) ", 1024, 0., 1024., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  mTOFtimeVsBCID = std::make_shared<TH2F>("TOFtimeVsBCID", "TOF time vs BCID;BC time (24.4 ps);time (ns) ", 1024, 0., 1024., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   getObjectsManager()->startPublishing(mTOFtimeVsBCID.get());
 
-  // mTOFchannelEfficiencyMap = std::make_shared<TH2F>("TOFchannelEfficiencyMap", "TOF channels (HWok && efficient && !noisy && !problematic);sector;strip", 72, 0., 18., 91, 0., 91.));
+  // mTOFchannelEfficiencyMap = std::make_shared<TH2F>("TOFchannelEfficiencyMap", "TOF channels (HWok && efficient && !noisy && !problematic);sector;strip", 72, 0., 18., 91, 0., 91.);
   // getObjectsManager()->startPublishing(mTOFchannelEfficiencyMap.get());
 
-  // mTOFhitsCTTM = std::make_shared<TH2F>("TOFhitsCTTM", "Map of hit pads according to CTTM numbering;LTM index;bit index", 72, 0., 72., 23, 0., 23.));
+  // mTOFhitsCTTM = std::make_shared<TH2F>("TOFhitsCTTM", "Map of hit pads according to CTTM numbering;LTM index;bit index", 72, 0., 72., 23, 0., 23.);
   // getObjectsManager()->startPublishing(mTOFhitsCTTM.get());
 
-  // mTOFmacropadCTTM = std::make_shared<TH2F>("TOFmacropadCTTM", "Map of hit macropads according to CTTM numbering;LTM index; bit index", 72, 0., 72., 23, 0., 23.));
+  // mTOFmacropadCTTM = std::make_shared<TH2F>("TOFmacropadCTTM", "Map of hit macropads according to CTTM numbering;LTM index; bit index", 72, 0., 72., 23, 0., 23.);
   // getObjectsManager()->startPublishing(mTOFmacropadCTTM.get());
 
-  // mTOFmacropadDeltaPhiTime = std::make_shared<TH2F>("TOFmacropadDeltaPhiTime", "#Deltat vs #Delta#Phi of hit macropads;#Delta#Phi (degrees);#DeltaBX", 18, 0., 180., 20, 0., 20.0));
+  // mTOFmacropadDeltaPhiTime = std::make_shared<TH2F>("TOFmacropadDeltaPhiTime", "#Deltat vs #Delta#Phi of hit macropads;#Delta#Phi (degrees);#DeltaBX", 18, 0., 180., 20, 0., 20.0);
   // getObjectsManager()->startPublishing(mTOFmacropadDeltaPhiTime.get());
 
-  // mBXVsCttmBit = std::make_shared<TH2I>("BXVsCttmBit", "BX ID in TOF matching window vs trg channel; trg channel; BX", 1728, 0, 1728, 24, 0, 24));
+  // mBXVsCttmBit = std::make_shared<TH2I>("BXVsCttmBit", "BX ID in TOF matching window vs trg channel; trg channel; BX", 1728, 0, 1728, 24, 0, 24);
   // getObjectsManager()->startPublishing(mBXVsCttmBit.get());
 
-  // mTimeVsCttmBit = std::make_shared<TH2F>("TimeVsCttmBit", "TOF raw time vs trg channel; trg channel; raw time (ns)", 1728, 0., 1728., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime));
+  // mTimeVsCttmBit = std::make_shared<TH2F>("TimeVsCttmBit", "TOF raw time vs trg channel; trg channel; raw time (ns)", 1728, 0., 1728., fgNbinsTime, fgRangeMinTime, fgRangeMaxTime);
   // getObjectsManager()->startPublishing(mTimeVsCttmBit.get());
 
-  // mTOFRawHitMap24 = std::make_shared<TH2F>("TOFRawHitMap24", "TOF average raw hits/channel map (1 bin = 1 FEA = 24 channels);sector;strip", 72, 0., 18., 91, 0., 91.));
+  // mTOFRawHitMap24 = std::make_shared<TH2F>("TOFRawHitMap24", "TOF average raw hits/channel map (1 bin = 1 FEA = 24 channels);sector;strip", 72, 0., 18., 91, 0., 91.);
   // getObjectsManager()->startPublishing(mTOFRawHitMap24.get());
 
-  // mHitMultiVsDDL = std::make_shared<TH2I>("itMultiVsDDL", "TOF raw hit multiplicity per event vs DDL ; DDL; TOF raw hits number; Events ", 72, 0., 72., 500, 0, 500));
+  // mHitMultiVsDDL = std::make_shared<TH2I>("itMultiVsDDL", "TOF raw hit multiplicity per event vs DDL ; DDL; TOF raw hits number; Events ", 72, 0., 72., 500, 0, 500);
   // getObjectsManager()->startPublishing(mHitMultiVsDDL.get());
 
-  // mNfiredMacropad = std::make_shared<TH1I>("NfiredMacropad", "Number of fired TOF macropads per event; number of fired macropads; Events ", 50, 0, 50));
+  // mNfiredMacropad = std::make_shared<TH1I>("NfiredMacropad", "Number of fired TOF macropads per event; number of fired macropads; Events ", 50, 0, 50);
   // getObjectsManager()->startPublishing(mNfiredMacropad.get());
 
-  mOrbitDDLstd::make_shared<TProfile2D>("OrbitDDL", "Orbits in TF vs DDL ; DDL; Orbits in TF; Fraction", 72, 0., 72., 256 * 3, 0, 256));
+  mOrbitDDL = std::make_shared<TProfile2D>("OrbitDDL", "Orbits in TF vs DDL ; DDL; Orbits in TF; Fraction", 72, 0., 72., 256 * 3, 0, 256);
   getObjectsManager()->startPublishing(mOrbitDDL.get());
 
-  mROWSize = std::make_shared<TH1I>("mROWSize", "N Orbits in TF; Orbits in TF", 300, 0., 300.));
+  mROWSize = std::make_shared<TH1I>("mROWSize", "N Orbits in TF; Orbits in TF", 300, 0., 300.);
   getObjectsManager()->startPublishing(mROWSize.get());
 }
 
