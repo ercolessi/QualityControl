@@ -70,17 +70,25 @@ Quality CheckRawMultiplicity::check(std::map<std::string, std::shared_ptr<Monito
             shifter_msg.push_back("Only events at 0 filled!");
           }
         } else {
-          // if (AliRecoParam::ConvertIndex(specie) == AliRecoParam::kCosmic) {
+          switch (mRunningMode) {
+            case mRunningModeCollisions: // Collisions
+              /* code */
+              break;
+            case mRunningModeCosmics: // Collisions
+              if (mRawHitsMean < 10.) {
+                result = Quality::Good;
+                shifter_msg.push_back("Average within limits, OK!");
+                // flag = AliQAv1::kINFO;
+              } else {
+                result = Quality::Medium;
+                shifter_msg.push_back("Average outside limits!");
+                // flag = AliQAv1::kWARNING;
+              }
+              break;
+            default:
+              break;
+          }
           if (0) { // TODO: this is only for cosmics, how to check? Re: from the configuration of the checker!
-            if (mRawHitsMean < 10.) {
-              result = Quality::Good;
-              shifter_msg.push_back("Average within limits, OK!");
-              // flag = AliQAv1::kINFO;
-            } else {
-              result = Quality::Medium;
-              shifter_msg.push_back("Average outside limits!");
-              // flag = AliQAv1::kWARNING;
-            }
           } else { // Running with collisions
             const bool isZeroBinContentHigh = (mRawHitsZeroMultIntegral > (mFractAtZeroMult * mRawHitsIntegral));
             const bool isLowMultContentHigh = (mRawHitsLowMultIntegral > (mFractAtLowMult * mRawHitsIntegral));
