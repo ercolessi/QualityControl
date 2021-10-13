@@ -57,7 +57,8 @@ Quality CheckRawTime::check(std::map<std::string, std::shared_ptr<MonitorObject>
       const Int_t highBinId = h->GetXaxis()->FindBin(mMaxRawTime);
       mRawTimePeakIntegral = h->Integral(lowBinId, highBinId);
       mRawTimeIntegral = h->Integral(1, h->GetNbinsX());
-      if ((mRawTimeMean > mMinRawTime) && (mRawTimeMean < mMaxRawTime)) {
+      result = Quality::Good;
+      /*if ((mRawTimeMean > mMinRawTime) && (mRawTimeMean < mMaxRawTime)) {
         result = Quality::Good;
       } else {
         if (mRawTimePeakIntegral / mRawTimeIntegral > mMinPeakRatioIntegral) {
@@ -67,7 +68,7 @@ Quality CheckRawTime::check(std::map<std::string, std::shared_ptr<MonitorObject>
           ILOG(Warning, Support) << Form("Raw time peak/total integral = %5.2f, mean = %5.2f ns", mRawTimePeakIntegral / mRawTimeIntegral, mRawTimeMean);
           result = Quality::Bad;
         }
-      }
+      }*/
     }
   }
   return result;
@@ -90,17 +91,17 @@ void CheckRawTime::beautify(std::shared_ptr<MonitorObject> mo, Quality checkResu
     if (checkResult == Quality::Good) {
       ILOG(Info, Support) << "Quality::Good, setting to green";
       msg->Clear();
-      msg->AddText("Mean inside limits: OK");
-      msg->AddText(Form("Allowed range: %3.0f-%3.0f ns", mMinRawTime, mMaxRawTime));
+      //msg->AddText("Mean inside limits: OK");
+      //msg->AddText(Form("Allowed range: %3.0f-%3.0f ns", mMinRawTime, mMaxRawTime));
       msg->SetFillColor(kGreen);
       msg->SetTextColor(kBlack);
     } else if (checkResult == Quality::Bad) {
       ILOG(Info, Support) << "Quality::Bad, setting to red";
       msg->Clear();
       msg->AddText("Call TOF on-call.");
-      msg->AddText(Form("Mean outside limits (%3.0f-%3.0f ns)", mMinRawTime, mMaxRawTime));
-      msg->AddText(Form("Raw time peak/total integral = %5.2f%%", mRawTimePeakIntegral * 100. / mRawTimeIntegral));
-      msg->AddText(Form("Mean = %5.2f ns", mRawTimeMean));
+      //msg->AddText(Form("Mean outside limits (%3.0f-%3.0f ns)", mMinRawTime, mMaxRawTime));
+      //msg->AddText(Form("Raw time peak/total integral = %5.2f%%", mRawTimePeakIntegral * 100. / mRawTimeIntegral));
+      //msg->AddText(Form("Mean = %5.2f ns", mRawTimeMean));
       msg->SetFillColor(kRed);
       msg->SetTextColor(kBlack);
     } else if (checkResult == Quality::Medium) {

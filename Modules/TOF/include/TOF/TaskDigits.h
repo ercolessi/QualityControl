@@ -58,7 +58,7 @@ class TaskDigits final : public TaskInterface
   int fgNbinsTime = 250;                            /// Number of bins in time plot
   float fgkNbinsWidthTime = 2.44;                   /// Width of bins in time plot
   float fgRangeMinTime = 0.0;                       /// Range min in time plot
-  float fgRangeMaxTime = 620.0;                     /// Range max in time plot
+  float fgRangeMaxTime = 30000.0;                   /// Range max in time plot
 
  private:
   // Event info
